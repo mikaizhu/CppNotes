@@ -1,0 +1,3 @@
+/Users/zwl/Desktop/CppNotes/code/day2/demo2/CMakeFiles/rebuild_cache.dir
+/Users/zwl/Desktop/CppNotes/code/day2/demo2/CMakeFiles/edit_cache.dir
+/Users/zwl/Desktop/CppNotes/code/day2/demo2/CMakeFiles/main.dir
