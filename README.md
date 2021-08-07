@@ -5,11 +5,12 @@
    * [Mac](#mac)
    * [运行逻辑](#运行逻辑)
    * [CMake](#cmake)
-* [01HelloWorld](#01helloworld)
-* [02Cmake](#02cmake)
+* [Day1 HelloWorld](#day1-helloworld)
+* [Day2 Cmake](#day2-cmake)
+* [Day3 Link and Compile](#day3-link-and-compile)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月 6日 星期五 14时33分14秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月 7日 星期六 13时19分39秒 CST -->
 
 <!--te-->
 # cpp教程推荐
@@ -49,7 +50,7 @@ cMake 的流程是：
 
 [参考视频](bilibili.com/video/BV16V411k7eF?from=search&seid=16111676939071467556) 
 
-# 01HelloWorld
+# Day1 HelloWorld
 
 创建文件：(cpp 文件主要都是以.cpp结尾)
 
@@ -60,7 +61,6 @@ vi HelloWorld.cpp
 编写代码：
 
 [day1](./code/day1/HelloWorld.cpp) 
-
 
 编译代码：(cpp 文件必须要用g++编译器进行编译，不能使用gcc编译)
 
@@ -98,7 +98,7 @@ g++ main.cpp -o main
 ./main
 ```
 
-# 02Cmake
+# Day2 Cmake
 
 - [Cmake书籍](https://github.com/xiaoweiChen/CMake-Cookbook/tree/master/content) 
 - [Cmake视频教程](bilibili.com/video/BV16V411k7eF?p=2) 
@@ -132,6 +132,41 @@ make
 后面加上很多cpp文件即可打包多个文件
 
 方法2：[参考代码](./code/day2/demo2/CMakeLists.txt) 
+
+# Day3 Link and Compile
+
+Compile: 编译的作用就是将cpp代码转换成计算机可执行的二进制文件。**注意, 文件名字不重
+要，.cpp告诉编译器是该文件是cpp文件，当然你也可以告诉编译器是其他文件**, 编译
+器先会处理文件中所有带"#"号的代码，表示预处理，include作用就是找到源文件，然后
+将这个文件的所有内容复制到当前位置
+
+```
+vi test.h
+}
+
+vi main.cpp
+#include "iostream"
+int main()
+{
+    std::cout << "Hello world"
+#include "test.h" //这里就会复制文件里的内容到这个地方
+```
+
+整个cpp文件到可执行文件，里面有以下步骤：
+
+1. preprocess(g++ -E demo1.cpp -o demo1.i)文件以i结尾，就是将预处理中文件的内
+   容复制到当前文件中，我们可以查看.i文件里面的内容
+2. compile(g++ -Sc demo1.i) 生成编译的文件此时后缀为.s
+3. link(g++ demo1.o -o main) 链接，生成可执行文件
+
+其他预处理方式：
+
+```
+#if 0 //这里也可以是1
+... // 如果是0，则内部的代码会忽略， 可以预处理 g++ -E后查看i文件的内容, 会发
+现里面没有代码
+#endif
+```
 
 # TODO
 
