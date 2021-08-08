@@ -8,9 +8,10 @@
 * [Day1 HelloWorld](#day1-helloworld)
 * [Day2 Cmake](#day2-cmake)
 * [Day3 Link and Compile](#day3-link-and-compile)
+* [day4 控制流语句](#day4-控制流语句)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月 7日 星期六 13时19分39秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月 8日 星期日 22时48分02秒 CST -->
 
 <!--te-->
 # cpp教程推荐
@@ -168,7 +169,13 @@ int main()
 #endif
 ```
 
+# day4 控制流语句
+
+[参考代码](./day4) 
+
 # TODO
+
+- [ ] cpp中的link原理
 
 **Situation3**:(多目录多文件)
 
