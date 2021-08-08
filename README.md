@@ -11,7 +11,7 @@
 * [day4 控制流语句](#day4-控制流语句)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月 8日 星期日 22时48分02秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月 8日 星期日 22时51分10秒 CST -->
 
 <!--te-->
 # cpp教程推荐
@@ -171,7 +171,7 @@ int main()
 
 # day4 控制流语句
 
-[参考代码](./day4) 
+[参考代码](./code/day4) 
 
 # TODO
 
