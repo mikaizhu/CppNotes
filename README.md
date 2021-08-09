@@ -9,9 +9,17 @@
 * [Day2 Cmake](#day2-cmake)
 * [Day3 Link and Compile](#day3-link-and-compile)
 * [day4 控制流语句](#day4-控制流语句)
+   * [while &amp; for 循环](#while--for-循环)
+   * [if else 语句](#if-else-语句)
+* [day5 变量和基本类型](#day5-变量和基本类型)
+* [day6 函数 和 头文件](#day6-函数-和-头文件)
+   * [函数](#函数)
+   * [头文件](#头文件)
+   * [头文件中的#pragma once](#头文件中的pragma-once)
+   * [预处理中"" 和 &lt;&gt; 的区别](#预处理中-和--的区别)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月 8日 星期日 22时51分10秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月 9日 星期一 22时07分45秒 CST -->
 
 <!--te-->
 # cpp教程推荐
@@ -171,7 +179,185 @@ int main()
 
 # day4 控制流语句
 
-[参考代码](./code/day4) 
+## while & for 循环 
+
+```
+// while 格式
+
+while ()
+{
+code
+}
+
+// for 格式
+
+for (int var; var < 10; ++var)
+{
+code
+}
+```
+
+- [参考代码1](./code/day4/demo1.cpp) 
+- [参考代码2](./code/day4/demo2.cpp) 
+- [参考代码3](./code/day4/demo3.cpp) 
+
+## if else 语句
+
+```
+// if else 格式
+if ()
+{}
+else
+{}
+
+// if else if else 格式
+
+if ()
+{}
+else if ()
+{}
+else if ()
+{}
+else
+{}
+```
+
+- [参考代码1](./code/day4/demo4.cpp) 
+- [参考代码2](./code/day4/demo5.cpp) 
+
+# day5 变量和基本类型
+
+cpp中含有很多数据类型，如：字符型，整型，浮点数等。这些数据的唯一本质区别就在于，
+所占的内存大小不一样.
+
+- [变量类型大小](./code/day5/demo1.cpp) 
+
+> 内存通常都是以字节 byte来进行计算, 1个字节为8比特bits, 计算机只能直接访问字
+> 节，而不能访问bit，所以计算机中是按字节进行位置编码来访问。
+
+- 注意：单引号用来存放字符， 双引号用来存放字符串
+
+cpp中几种常见的数据类型：
+```
+char long int (long long) float double
+每个数据类型都可分为有符号和无符号
+unsigned
+
+float a = 1.2f; // float要这样定义
+double a = 1.2;
+
+// char 类型只能存放到128以内的数值，打了就会报错，因为char为8bits
+char char_a = 'A', char_b = 65; // char类型也可以赋值为数字， 只不过编译器认为这个变量就是字符，因此会把这个数值转换成字母，
+int int_a = 'A', int_b = 65;
+std::cout << "char_a is " << char_a << std::endl;
+std::cout << "char_b is " << char_b << std::endl;
+std::cout << "int_a is " << int_a << std::endl;
+std::cout << "int_b is " << int_b << std::endl;
+```
+
+# day6 函数 和 头文件
+
+## 函数
+
+cpp中的函数定义，有下面几个步骤：
+
+```
+1. 定义函数的类型 int void等
+2. 为函数设置参数
+3. 编写函数的内容
+
+```
+- [参考代码](./code/day6/demo1.cpp) 
+
+## 头文件
+
+当我需要从一个文件中，调用另一个文件中的函数时，可以直接调用。当我有多个文件都
+需要调用同一个同一个函数时，则将这个函数写入头文件中会比较方便。
+
+从一个文件调用另一个文件的函数的方法：
+
+```
+vi demo2.py // 在demo2中写一个函数, 然后在demo3中调用
+
+#include <iostream>
+
+void Log(const char* message) // 如果直接定义char类型，则只能输入单个字符，这
+样就能输入多个字符
+{
+    std::cout << message << std::endl;
+}
+
+vi demo3.py
+
+void Log(const char* message); // 这里必须要定义，这样才能找到, 注意不能丢失分
+号;
+
+int main()
+{
+   Log("Hello world");
+}
+```
+
+现在使用头文件来实现上面的方法
+
+```
+// vi test.h
+
+void Log(const char* message);
+void InitialLog();
+
+// vi demo3.cpp
+
+#include "test.h"
+
+int main()
+{
+    InitialLog();
+    Log("Hello world");
+}
+
+#include <iostream>
+
+void Log(const char* message)
+{
+    std::cout << message << std::endl;
+}
+
+// vi demo2.cpp
+
+void InitialLog()
+{
+    std::cout << "InitialLog" << std::endl;
+}
+
+g++ demo3.cpp demo2.cpp // 注意demo2 & 3 都要编译
+```
+
+## 头文件中的#pragma once
+
+为什么头文件需要pragma once呢？因为防止函数被重复定义，否则会报错，代码中，我
+们在头文件中，如果重复定义函数，没有出现什么问题，当我们在头文件中添加结构体
+
+```
+struct Player{};
+
+然后在main函数里面, 调用两次
+#include "test.h"
+#include "test.h"
+
+然后则会出现错误
+```
+
+解决方法就是在每个头文件中添加`#pragma once`
+
+或许我们不会傻乎乎地调用同一个头文件两次，但是谁也不能保证两个头文件中不会出现
+重复定义。
+
+## 预处理中`""` 和 `<>` 的区别
+
+1. 使用尖括号时，编译器会从默认的路径中进行查找文件，当然我们也可以自己手动添
+   加路径
+2. 使用引号则出现在相对路径，如`../test.h`, `test.h`
 
 # TODO
 
