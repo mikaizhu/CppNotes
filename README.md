@@ -18,10 +18,13 @@
    * [头文件中的#pragma once](#头文件中的pragma-once)
    * [预处理中"" 和 &lt;&gt; 的区别](#预处理中-和--的区别)
 * [day7 控制流语句 continue return break](#day7-控制流语句-continue-return-break)
-* [day8 指针](#day8-指针)
+* [day8 指针 引用](#day8-指针-引用)
+   * [指针](#指针)
+   * [引用](#引用)
+* [day9 类](#day9-类)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月14日 星期六 18时48分22秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月15日 星期日 17时01分56秒 CST -->
 
 <!--te-->
 # cpp教程推荐
@@ -385,7 +388,9 @@ return 是退出当前函数，后面代码都不会执行
 
 break是退出当前循环，执行循环外的代码
 
-# day8 指针
+# day8 指针 引用
+
+## 指针
 
 指针通常用来进行内存管理，指针变量里面存放的是内存的地址，每个地址只是一串数字
 而已。可以想象内存其实就是一条笔直的街道，这个街道两边有很多房间，每个房间都有
@@ -399,8 +404,108 @@ break是退出当前循环，执行循环外的代码
 使用int** p;来创建二级指针
 ```
 
-
 [参考代码](./code/day8/demo1.cpp) 
+
+## 引用
+
+引用并不占用内存，引用只是指针的另一个名字
+
+[参考代码](./code/day8/demo2.cpp) 
+
+# day9 类
+
+类的作用是面向对象编程，有属性和方法两个主要点。假如现在要写一个游戏，我们需要
+为玩家设定一些属性，和方法，比如行走，跑等。为了方便代码和维护，我们将这些统一
+在一个类中.
+
+cpp中创建一个类的方法为：
+
+```
+class Player // 定义一个类
+{
+  public: // public 是为了让main函数中能访问类对象中的属性
+    int x, y;
+    int speed;
+}; // 这里一定要分号
+
+int main()
+{
+    Player player; // 想int a; 一样实例话一个对象
+    player.x = 2; // 给对象里的属性重新设置
+    player.y = 3;
+    player.speed = 4;
+}
+```
+
+- 为了让main函数能访问到类中的属性，必须添加public, 否则属性是私有的
+
+```
+class Player
+{
+  public:
+    int x, y;
+    int speed;
+
+    void move()
+    {
+        x += speed; // 这里的x不是局部变量，相当于python中的self.x, 所以这里可
+        以改变实际的值
+        y += speed;
+    }
+};
+
+int main()
+{
+    Player player;
+    player.x = 2;
+    player.y = 3;
+    player.speed = 2;
+    player.move();
+    std::cout << "x is " << player.x << '\n'
+    << "y is " << player.y << std::endl;
+}
+```
+
+类方法也可以采用引用
+
+```
+void move(Player& player1) // 这里必须传入实例对象进去, 这里采用了引用
+{
+    player1.x += player1.speed;
+    player1.y += player1.speed;
+}
+
+int main()
+{
+    Player player;
+    player.x = 2;
+    player.y = 3;
+    player.speed = 2;
+    player.move();
+    std::cout << "x is " << player.x << '\n'
+    << "y is " << player.y << std::endl;
+
+    move(player);
+    std::cout << "x is " << player.x << '\n'
+    << "y is " << player.y << std::endl;
+
+}
+
+```
+
+如果不使用引用：
+
+```
+void move(Player player1) // 这里必须传入实例对象进去
+{
+    player1.x += player1.speed;
+    player1.y += player1.speed;
+}
+
+```
+
+则相当于创建了一个新的类对象，相当于局部的，没有在之前的上面修改, 如果不是在类
+里面写方法, 要使用引用
 
 # TODO
 
