@@ -25,9 +25,13 @@
    * [类的定义](#类的定义)
    * [class &amp; struct 的区别](#class--struct-的区别)
    * [用类创建一个基本日志功能](#用类创建一个基本日志功能)
+* [day10 static extern](#day10-static-extern)
+   * [全局变量中的static](#全局变量中的static)
+   * [类中的static](#类中的static)
+   * [局部静态 local static](#局部静态-local-static)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月16日 星期一 14时47分16秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月16日 星期一 16时46分02秒 CST -->
 
 <!--te-->
 # cpp教程推荐
@@ -540,6 +544,144 @@ return 0;
 ## 用类创建一个基本日志功能
 
 - [参考代码](./code/day9/demo3.cpp) 
+
+# day10 static extern
+
+static 有用在两个地方，一个是类结构体里面，一个是类的外面
+
+## 全局变量中的static
+
+如果不想在一个文件中调用另一个文件的变量时，使用static
+
+假如现在有两个文件：
+
+- demo1.cpp 文件只有下面一行
+
+```
+int value = 10;
+```
+
+- demo2.cpp 文件内容
+
+```
+int value = 10;
+
+int main()
+{
+    std::cout << "value: " << value << std::endl;
+}
+```
+
+```
+g++ demo1.cpp demo2.cpp
+```
+
+如果对这两个文件进行编译，那么会出现错误，因为cpp中不允许有两个同样名字的全局
+变量.
+
+解决方法：(在外面加上static)
+
+```
+static int value = 10;
+```
+
+- static 允许该变量只作用与当前的文件内, 如果想在另一个文件内调用这个文件的全
+  局变量，那么不需要static
+
+- 如果想从一个文件中调用另一个文件中的变量或者函数
+
+```
+extern int Value;
+
+int Value = 10;
+
+```
+
+同样，也可以对函数使用static
+
+```
+vi demo1.cpp
+void test1()
+{}
+
+static void test2()
+{}
+
+vi demo2.cpp
+
+extern int Value;
+extern void test1();
+```
+
+## 类中的static
+
+如果在类中对变量使用static, 那么如果实例化多个对象，这些对象如果对该static变量
+修改，都会对其造成影响，因为这些变量使用的是同一内存.
+
+[参考代码](./code/day10/demo3.cpp) 
+
+```
+struct Player
+{
+    static int x, y;
+    void Print()
+    {
+        std::cout << "x is " << x << std::endl;
+        std::cout << "y is " << y << std::endl;
+    }
+};
+
+int Player::x;
+int Player::y;
+```
+
+注意以下几点:
+
+- 如果类对象中有static，那么这些变量就不是类中的变量了，可以看成全局变量
+- 因此我们必须在外部重新定义，否则会报错，并说明这些变量的作用域是Player类中
+
+因此这样写才是最标准的，这些变量严格上不是类的变量了
+
+```
+Player::x = 5;
+Player::y = 7;
+```
+
+如果是类方法中的函数，就不需要先定义
+
+```
+static void Print()
+{
+  std::cout << "x is " << x << std::endl;
+  std::cout << "y is " << y << std::endl;
+}
+Player::Print();
+```
+
+## 局部静态 local static
+
+局部静态作用在函数中，当我们在函数中定义了一个static变量，那么这个变量就会一致
+作用在这个函数中，内存是共享的.
+
+[参考代码](./code/day10/demo4.cpp) 
+
+```
+void Function()
+{
+    static int i = 0;
+    i++;
+    std::cout << i << std::endl;
+}
+
+int main()
+{
+    Function();
+    int i = 1; // 可以看到外部函数重新定义了也没有影响
+    Function();
+    Function();
+    Function();
+}
+```
 
 # TODO
 
