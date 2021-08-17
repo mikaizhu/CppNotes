@@ -31,9 +31,14 @@
    * [局部静态 local static](#局部静态-local-static)
 * [day 11](#day-11)
    * [enumeration 枚举类型](#enumeration-枚举类型)
+   * [变量说明](#变量说明)
+* [day12](#day12)
+   * [构造函数 constructor](#构造函数-constructor)
+   * [destructor 析构函数](#destructor-析构函数)
+   * [继承](#继承)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月17日 星期二 11时46分00秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月17日 星期二 19时49分03秒 CST -->
 
 <!--te-->
 # cpp教程推荐
@@ -703,7 +708,165 @@ enum name : int  // name 可以是任何，冒号后面指定数据类型，不�
 name variable_name = A or B or C // 相当于int var_name
 ```
 
+**对之前的log日志进行修改**
 
+[log日志代码改进](./code/day11/demo2.cpp) 
+
+注意以下几点:
+
+```
+1. 使用枚举是为了方便管理变量
+  public:
+    enum Level : int
+    {
+        LevelWarning = 0, LevelInfo = 1, LevelError = 2
+    };
+
+2.  限制这个变量只能使用枚举中的
+  private:
+    Level LogLevel_m;
+
+3. 限制输入的变量也只能是枚举
+
+    void SetLevel(Level level)
+    {
+        LogLevel_m = level;
+    }
+```
+
+## 变量说明
+
+- 局部变量
+- 全局变量
+
+如果定义了一个变量时，局部变量和全局变量都会自动初始化. 不同类型的数据，全局变
+量初始化是固定的，比如全局变量中，int都会初始化为0，局部变量的初始化是随机的.
+
+[初始化参考代码](./code/day11/demo3.cpp) 
+
+# day12
+
+## 构造函数 constructor
+
+就像python类中的init一样，我们需要类在实例化的同时，会自动执行一些函数，这个在
+cpp中叫做构造函数.
+
+构造方法如下：
+
+- 构造函数出现在类中
+- 构造函数的名字必须和类对象的名字一样
+
+```
+class Player
+{
+  public:
+    float X, Y;
+
+    Player ()
+    {
+        X = 0.0f;
+        Y = 0.0f;
+    }
+
+    void Print()
+    {
+        cout << X << " " << Y << endl;
+    }
+};
+
+```
+
+上面这个构造函数是不带参数的，如果需要带参数，构造方法如下：
+
+- [参考代码1](./code/day12/demo1.cpp)
+- [参考代码2](./code/day12/demo2.cpp)
+
+```
+class Player
+{
+  public:
+    float X, Y;
+
+    Player (float x, float y)
+    {
+        X = x;
+        Y = y;
+    }
+
+    void Print()
+    {
+        cout << X << " " << Y << endl;
+    }
+};
+```
+
+## destructor 析构函数
+
+和构造函数相反，当类对象被销毁的时候， 这个函数会自动执行，就像python类中的
+delete魔法方法一样.
+
+```
+    Player ()
+    {
+        X = 0.0f;
+        Y = 0.0f;
+        cout << "Creat constructer" << endl;
+    }
+
+    ~Player ()
+    {
+        cout << "delete constructer" << endl;
+    }
+```
+
+构造方法就是在类名字前加一个`~`
+
+```
+void Function()
+{
+    Player player1;
+    player1.Print();
+}
+
+int main()
+{
+    Function();
+    cin.get();
+}
+```
+
+- 观察上面函数，可以发现我们首先调用了Function函数，当这个函数调用完后，内存会
+  释放掉
+
+- [参考代码](./code/day12/demo3.cpp) 
+
+## 继承 
+
+继承是为了避免写重复的代码，当我们创建了一个新类，通常只是在父类的基础上添加一
+些新的东西.
+
+- [参考代码](./code/day12/demo4.cpp) 
+
+- 继承的方法如下, 前面要加一个public
+
+```
+class Player : public Entity
+{
+  public:
+    const char* Name;
+
+    Player (char *name)
+    {
+        Name = name;
+    }
+
+    void PrintName()
+    {
+        cout << Name << endl;
+    }
+};
+
+```
 
 # TODO
 

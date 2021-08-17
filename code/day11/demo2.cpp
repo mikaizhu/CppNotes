@@ -7,30 +7,36 @@ class Log
 {
     // 可以这样分隔开私有和公有变量，方便管理
   public:
-    const int LogLevelWarning = 0;
-    const int LogLevelInfo = 1;
-    const int LogLevelError = 2;
+    enum Level : int
+    {
+        LevelWarning = 0, LevelInfo = 1, LevelError = 2
+    };
+
   private:
-    int LogLevel_m;
+    Level LogLevel_m;
+
   public:
-    void SetLevel(int level)
+    void SetLevel(Level level)
     {
         LogLevel_m = level;
     }
-    void Info(const char* message)
-    {
-        if (LogLevel_m <= 1)
-            cout << "[Info]: " << message << endl;
-    }
-    void Error(const char* message)
-    {
-        if (LogLevel_m <= 2)
-            cout << "[Error]: " << message << endl;
-    }
+
     void Warn(const char* message)
     {
-        if (LogLevel_m <= 0)
+        if (LogLevel_m <= LevelWarning)
             cout << "[Warning]: " << message << endl;
+    }
+
+    void Info(const char* message)
+    {
+        if (LogLevel_m <= LevelInfo)
+            cout << "[Info]: " << message << endl;
+    }
+
+    void Error(const char* message)
+    {
+        if (LogLevel_m <= LevelError)
+            cout << "[Error]: " << message << endl;
     }
 };
 
@@ -39,7 +45,7 @@ int main()
     Log log;
     //log.SetLevel("warn");
     //log.SetLevel("debug");
-    log.SetLevel(log.LogLevelError);
+    log.SetLevel(Log::LevelInfo);
     log.Info("Hello World");
     log.Error("Hello World");
     log.Warn("Hello World");
