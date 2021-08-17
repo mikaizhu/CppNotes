@@ -29,14 +29,17 @@
    * [全局变量中的static](#全局变量中的static)
    * [类中的static](#类中的static)
    * [局部静态 local static](#局部静态-local-static)
+* [day 11](#day-11)
+   * [enumeration 枚举类型](#enumeration-枚举类型)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月16日 星期一 16时46分02秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月17日 星期二 11时46分00秒 CST -->
 
 <!--te-->
 # cpp教程推荐
 
 - 【B站】https://space.bilibili.com/364152971/video?tid=0&page=3&keyword=&order=pubdate
+- 【菜鸟教程基本语法】https://www.runoob.com/cplusplus/cpp-tutorial.html
 
 # 环境搭配
 
@@ -682,6 +685,25 @@ int main()
     Function();
 }
 ```
+
+# day 11 
+
+## enumeration 枚举类型
+
+当有些变量只有有限个时，为了方便管理，使用枚举类型
+
+枚举类型语法：
+
+```
+enum name : int  // name 可以是任何，冒号后面指定数据类型，不能是浮点型
+{
+    A, B, C // 默认会赋值A为0， B为1
+};
+
+name variable_name = A or B or C // 相当于int var_name
+```
+
+
 
 # TODO
 
