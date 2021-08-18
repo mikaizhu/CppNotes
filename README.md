@@ -54,9 +54,11 @@
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月18日 星期三 22时53分50秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月18日 星期三 22时58分00秒 CST -->
 
 <!--te-->
+
+
 
 [back to top](# 目录)
 # cpp教程推荐
@@ -96,6 +98,8 @@ cMake 的流程是：
 4. 运行可执行文件
 
 [参考视频](bilibili.com/video/BV16V411k7eF?from=search&seid=16111676939071467556) 
+
+
 
 
 [back to top](# 目录)
@@ -149,6 +153,8 @@ g++ main.cpp -o main
 
 
 
+
+
 [back to top](# 目录)
 # Day2 Cmake
 
@@ -186,6 +192,8 @@ make
 方法2：[参考代码](./code/day2/demo2/CMakeLists.txt) 
 
 
+
+
 [back to top](# 目录)
 # Day3 Link and Compile
 
@@ -221,6 +229,8 @@ int main()
 现里面没有代码
 #endif
 ```
+
+
 
 
 [back to top](# 目录)
@@ -288,6 +298,8 @@ else
 - [参考代码2](./code/day4/demo5.cpp) 
 
 
+
+
 [back to top](# 目录)
 # day5 变量和基本类型
 
@@ -318,6 +330,8 @@ std::cout << "char_b is " << char_b << std::endl;
 std::cout << "int_a is " << int_a << std::endl;
 std::cout << "int_b is " << int_b << std::endl;
 ```
+
+
 
 
 [back to top](# 目录)
@@ -478,6 +492,8 @@ struct Player{};
 
 
 
+
+
 [back to top](# 目录)
 # day7 控制流语句 continue return break
 
@@ -486,6 +502,8 @@ struct Player{};
 return 是退出当前函数，后面代码都不会执行
 
 break是退出当前循环，执行循环外的代码
+
+
 
 
 [back to top](# 目录)
@@ -512,6 +530,8 @@ break是退出当前循环，执行循环外的代码
 引用并不占用内存，引用只是指针的另一个名字
 
 [参考代码](./code/day8/demo2.cpp) 
+
+
 
 
 [back to top](# 目录)
@@ -640,6 +660,8 @@ return 0;
 ## 用类创建一个基本日志功能
 
 - [参考代码](./code/day9/demo3.cpp) 
+
+
 
 
 [back to top](# 目录)
@@ -782,6 +804,8 @@ int main()
 ```
 
 
+
+
 [back to top](# 目录)
 # day 11 
 
@@ -835,6 +859,8 @@ name variable_name = A or B or C // 相当于int var_name
 量初始化是固定的，比如全局变量中，int都会初始化为0，局部变量的初始化是随机的.
 
 [初始化参考代码](./code/day11/demo3.cpp) 
+
+
 
 
 [back to top](# 目录)
@@ -961,6 +987,8 @@ class Player : public Entity
 };
 
 ```
+
+
 
 
 [back to top](# 目录)
@@ -1115,6 +1143,8 @@ using namespace std;
 ```
 
 
+
+
 [back to top](# 目录)
 # day14(TODO)
 
@@ -1123,6 +1153,8 @@ using namespace std;
 ## 纯虚函数
 
 ## 可见性
+
+
 
 
 

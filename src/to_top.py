@@ -25,7 +25,7 @@ content.pop(0)
 content.pop(1)
 
 front_line = ""
-add_content = f"\n[back to top](# 目录)\n"
+add_content = f"\n[back to top](#目录)\n"
 
 with open(file) as f:
     for line in f:
