@@ -14,6 +14,7 @@
 * [day5 变量和基本类型](#day5-变量和基本类型)
 * [day6 函数 和 头文件](#day6-函数-和-头文件)
    * [函数](#函数)
+   * [函数声明 变量声明](#函数声明-变量声明)
    * [头文件](#头文件)
    * [头文件中的#pragma once](#头文件中的pragma-once)
    * [预处理中"" 和 &lt;&gt; 的区别](#预处理中-和--的区别)
@@ -36,9 +37,21 @@
    * [构造函数 constructor](#构造函数-constructor)
    * [destructor 析构函数](#destructor-析构函数)
    * [继承](#继承)
+* [day13](#day13)
+   * [数组](#数组)
+      * [一维数组](#一维数组)
+      * [多维度数组](#多维度数组)
+      * [指向数组的指针](#指向数组的指针)
+      * [传递数组给函数](#传递数组给函数)
+      * [从函数返回数组](#从函数返回数组)
+   * [字符串](#字符串)
+* [day14(TODO)](#day14todo)
+   * [虚函数](#虚函数)
+   * [纯虚函数](#纯虚函数)
+   * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月17日 星期二 19时49分03秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月18日 星期三 16时40分36秒 CST -->
 
 <!--te-->
 # cpp教程推荐
@@ -303,6 +316,57 @@ cpp中的函数定义，有下面几个步骤：
 
 ```
 - [参考代码](./code/day6/demo1.cpp) 
+
+## 函数声明 变量声明
+
+不管这个函数有没有，在哪个位置，我们在开头先声明，请看下面的情况:
+
+- situation1
+
+```
+int main()
+{
+    const int size = 5;
+    int list[size] = {2, 3, 4, 5, 7};
+    cout << "input average is " << GetAverage1(list, size) << endl;
+}
+
+int GetAverage1(int list[], int size)
+{
+    int sum = 0, agv;
+    for (int i = 0; i < size; i++)
+    {
+        sum += list[i];
+    }
+    agv = sum / size;
+    return agv;
+}
+
+```
+
+- situation2, 不管该函数在哪个位置，都没有问题
+
+```
+int getaverage1(int list[], int size); // 函数声明
+
+int main()
+{
+    const int size = 5;
+    int list[size] = {2, 3, 4, 5, 7};
+    cout << "input average is " << getaverage1(list, size) << endl;
+}
+
+int getaverage1(int list[], int size)
+{
+    int sum = 0, agv;
+    for (int i = 0; i < size; i++)
+    {
+        sum += list[i];
+    }
+    agv = sum / size;
+    return agv;
+}
+```
 
 ## 头文件
 
@@ -867,6 +931,133 @@ class Player : public Entity
 };
 
 ```
+
+# day13
+
+## 数组
+
+### 一维数组
+
+定义一个数组, cpp中的数组和python中的数组不一样，cpp中的数组只能存放同一类型的
+数据, python中的数组可以存放不同类型的数据
+
+定义的方法如下:
+
+```
+int list[5]; // 一定要声明array的大小
+int list[5] = {1, 2, 3, 4, 5};
+```
+
+- 当我们定义了一个array的时候，这个array其实就是一个指针，如list
+- 数组是一块连续的内存
+
+```
+    int* pt = list;
+    cout << "the first element is " << *pt << endl;
+    cout << "the second element is " << *(pt + 1) << endl;
+```
+
+### 多维度数组
+
+- 多维数组有下面几种定义方式
+- 多维数组的内存使用也是连续的
+
+```
+    // 二维数组
+
+    int d_2list[2][2];
+
+    int d_2list[2][2] = {
+        {1, 2},
+        {3, 4},
+    };
+
+    int d_2list[2][2] = {1, 2, 3, 4};
+    
+    // 高维度数组
+    int d_3list[2][2][2];
+```
+
+### 指向数组的指针
+
+- 当我们创建一个数组的时候，数组名就是一个指针，指向第一个元素的地址
+- 我们可以使用指针来访问array的元素值
+
+```
+int list[3];
+
+相当于
+
+int* list = &list[0]
+
+*(list + 1)
+```
+
+[参考代码](./code/day13/demo1.cpp) 
+
+### 传递数组给函数
+
+即函数的形式参数为数组, 传递方式有如下三种:
+
+```
+// 形式参数是一个未定义大小的数组
+int getaverage1(int list[], int size)
+
+
+// 形式参数是一个定义大小的数组
+int getaverage2(int list[size], int size)
+
+// 形式参数是一个指针
+int getaverage3(int *list, int size)
+```
+
+- [具体请看代码](./code/day13/demo2.cpp) 
+
+### 从函数返回数组
+
+要注意以下几点：
+
+- 注意点1: 函数类型必须为指针类型，即返回的数据为指针
+- 注意点2: 接受函数返回的指针，必须要定义一个指针
+- 注意点3: 这里必须使用static，因为是局部变量，当函数调用完后，内部的内存都会销毁，使用static可以保证不会销毁，如果不加static， 那么打印出来的随机的，不是1 2 3
+
+
+```
+const int size = 3;
+int* GetList(); // 注意点1, 定义一个返回类型为指针的函数
+
+int main()
+{
+    int* list = GetList(); // 注意点2, 必须定义一个指针，接受函数的返回值
+    for (int i = 0; i < size ; i++)
+    {
+        cout << i << ": " << list[i] << endl;
+    }
+}
+
+int* GetList()
+{
+    static int list[size] = {1, 2, 3}; // 注意点3: 这里必须使用static，因为是
+    局部变量，当函数调用完后，内部的内存都会销毁，使用static可以保证不会销毁，
+    如果不加static， 那么打印出来的随机的，不是1 2 3
+    return list;
+}
+
+```
+
+## 字符串
+
+
+
+
+# day14(TODO)
+
+## 虚函数
+
+## 纯虚函数
+
+## 可见性
+
 
 # TODO
 
