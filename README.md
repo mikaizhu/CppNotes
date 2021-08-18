@@ -54,7 +54,7 @@
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月18日 星期三 23时01分44秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月18日 星期三 23时05分00秒 CST -->
 
 <!--te-->
 
@@ -66,7 +66,9 @@
 
 
 
-[back to top](#目录)
+
+
+[【↥ back to top】](#目录)
 # cpp教程推荐
 
 - 【B站】https://space.bilibili.com/364152971/video?tid=0&page=3&keyword=&order=pubdate
@@ -114,7 +116,9 @@ cMake 的流程是：
 
 
 
-[back to top](#目录)
+
+
+[【↥ back to top】](#目录)
 # Day1 HelloWorld
 
 创建文件：(cpp 文件主要都是以.cpp结尾)
@@ -173,7 +177,9 @@ g++ main.cpp -o main
 
 
 
-[back to top](#目录)
+
+
+[【↥ back to top】](#目录)
 # Day2 Cmake
 
 - [Cmake书籍](https://github.com/xiaoweiChen/CMake-Cookbook/tree/master/content) 
@@ -218,7 +224,9 @@ make
 
 
 
-[back to top](#目录)
+
+
+[【↥ back to top】](#目录)
 # Day3 Link and Compile
 
 Compile: 编译的作用就是将cpp代码转换成计算机可执行的二进制文件。**注意, 文件名字不重
@@ -263,7 +271,9 @@ int main()
 
 
 
-[back to top](#目录)
+
+
+[【↥ back to top】](#目录)
 # day4 控制流语句
 
 ## while & for 循环 
@@ -336,7 +346,9 @@ else
 
 
 
-[back to top](#目录)
+
+
+[【↥ back to top】](#目录)
 # day5 变量和基本类型
 
 cpp中含有很多数据类型，如：字符型，整型，浮点数等。这些数据的唯一本质区别就在于，
@@ -376,7 +388,9 @@ std::cout << "int_b is " << int_b << std::endl;
 
 
 
-[back to top](#目录)
+
+
+[【↥ back to top】](#目录)
 # day6 函数 和 头文件
 
 ## 函数
@@ -542,7 +556,9 @@ struct Player{};
 
 
 
-[back to top](#目录)
+
+
+[【↥ back to top】](#目录)
 # day7 控制流语句 continue return break
 
 这几个语句和python中差不多，就是continue会跳过下面代码，进入下一个循环
@@ -560,7 +576,9 @@ break是退出当前循环，执行循环外的代码
 
 
 
-[back to top](#目录)
+
+
+[【↥ back to top】](#目录)
 # day8 指针 引用
 
 ## 指针
@@ -594,7 +612,9 @@ break是退出当前循环，执行循环外的代码
 
 
 
-[back to top](#目录)
+
+
+[【↥ back to top】](#目录)
 # day9 类
 
 ## 类的定义
@@ -730,7 +750,9 @@ return 0;
 
 
 
-[back to top](#目录)
+
+
+[【↥ back to top】](#目录)
 # day10 static extern
 
 static 有用在两个地方，一个是类结构体里面，一个是类的外面
@@ -878,7 +900,9 @@ int main()
 
 
 
-[back to top](#目录)
+
+
+[【↥ back to top】](#目录)
 # day 11 
 
 ## enumeration 枚举类型
@@ -941,7 +965,9 @@ name variable_name = A or B or C // 相当于int var_name
 
 
 
-[back to top](#目录)
+
+
+[【↥ back to top】](#目录)
 # day12
 
 ## 构造函数 constructor
@@ -1075,7 +1101,9 @@ class Player : public Entity
 
 
 
-[back to top](#目录)
+
+
+[【↥ back to top】](#目录)
 # day13
 
 ## 数组
@@ -1232,7 +1260,9 @@ using namespace std;
 
 
 
-[back to top](#目录)
+
+
+[【↥ back to top】](#目录)
 # day14(TODO)
 
 ## 虚函数
@@ -1243,7 +1273,9 @@ using namespace std;
 
 
 
-[back to top](#目录)
+
+
+[【↥ back to top】](#目录)
 # TODO
 
 - [ ] cpp中的link原理
