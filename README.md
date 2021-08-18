@@ -54,7 +54,7 @@
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月18日 星期三 20时27分12秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月18日 星期三 20时31分35秒 CST -->
 
 <!--te-->
 # cpp教程推荐
@@ -62,11 +62,12 @@
 - 【B站】https://space.bilibili.com/364152971/video?tid=0&page=3&keyword=&order=pubdate
 - 【菜鸟教程基本语法】https://www.runoob.com/cplusplus/cpp-tutorial.html
 
-<br/>
+
 <div align="right">
-    <b><a href="#----">↥ back to top</a></b>
+    <b><a href="# 目录">↥ back to top</a></b>
 </div>
-<br/>
+
+
 
 # 环境搭配
 
@@ -148,6 +149,10 @@ g++ main.cpp log.cpp
 g++ main.cpp -o main
 ./main
 ```
+
+<div align="right">
+    <b><a href="# 目录">↥ back to top</a></b>
+</div>
 
 # Day2 Cmake
 
