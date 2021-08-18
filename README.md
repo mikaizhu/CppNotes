@@ -54,20 +54,15 @@
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月18日 星期三 20时33分11秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月18日 星期三 22时53分50秒 CST -->
 
 <!--te-->
+
+[back to top](# 目录)
 # cpp教程推荐
 
 - 【B站】https://space.bilibili.com/364152971/video?tid=0&page=3&keyword=&order=pubdate
 - 【菜鸟教程基本语法】https://www.runoob.com/cplusplus/cpp-tutorial.html
-
-<br/>
-<div align="right">
-    <b><a href="# 目录">↥ back to top</a></b>
-</div>
-<br/>
-
 
 # 环境搭配
 
@@ -102,6 +97,8 @@ cMake 的流程是：
 
 [参考视频](bilibili.com/video/BV16V411k7eF?from=search&seid=16111676939071467556) 
 
+
+[back to top](# 目录)
 # Day1 HelloWorld
 
 创建文件：(cpp 文件主要都是以.cpp结尾)
@@ -150,12 +147,9 @@ g++ main.cpp -o main
 ./main
 ```
 
-<br/>
-<div align="right">
-    <b><a href="# 目录">↥ back to top</a></b>
-</div>
-<br/>
 
+
+[back to top](# 目录)
 # Day2 Cmake
 
 - [Cmake书籍](https://github.com/xiaoweiChen/CMake-Cookbook/tree/master/content) 
@@ -191,6 +185,8 @@ make
 
 方法2：[参考代码](./code/day2/demo2/CMakeLists.txt) 
 
+
+[back to top](# 目录)
 # Day3 Link and Compile
 
 Compile: 编译的作用就是将cpp代码转换成计算机可执行的二进制文件。**注意, 文件名字不重
@@ -226,6 +222,8 @@ int main()
 #endif
 ```
 
+
+[back to top](# 目录)
 # day4 控制流语句
 
 ## while & for 循环 
@@ -289,6 +287,8 @@ else
 - [参考代码1](./code/day4/demo4.cpp) 
 - [参考代码2](./code/day4/demo5.cpp) 
 
+
+[back to top](# 目录)
 # day5 变量和基本类型
 
 cpp中含有很多数据类型，如：字符型，整型，浮点数等。这些数据的唯一本质区别就在于，
@@ -319,6 +319,8 @@ std::cout << "int_a is " << int_a << std::endl;
 std::cout << "int_b is " << int_b << std::endl;
 ```
 
+
+[back to top](# 目录)
 # day6 函数 和 头文件
 
 ## 函数
@@ -475,6 +477,8 @@ struct Player{};
 2. 使用引号则出现在相对路径，如`../test.h`, `test.h`
 
 
+
+[back to top](# 目录)
 # day7 控制流语句 continue return break
 
 这几个语句和python中差不多，就是continue会跳过下面代码，进入下一个循环
@@ -483,6 +487,8 @@ return 是退出当前函数，后面代码都不会执行
 
 break是退出当前循环，执行循环外的代码
 
+
+[back to top](# 目录)
 # day8 指针 引用
 
 ## 指针
@@ -507,6 +513,8 @@ break是退出当前循环，执行循环外的代码
 
 [参考代码](./code/day8/demo2.cpp) 
 
+
+[back to top](# 目录)
 # day9 类
 
 ## 类的定义
@@ -633,6 +641,8 @@ return 0;
 
 - [参考代码](./code/day9/demo3.cpp) 
 
+
+[back to top](# 目录)
 # day10 static extern
 
 static 有用在两个地方，一个是类结构体里面，一个是类的外面
@@ -771,6 +781,8 @@ int main()
 }
 ```
 
+
+[back to top](# 目录)
 # day 11 
 
 ## enumeration 枚举类型
@@ -824,6 +836,8 @@ name variable_name = A or B or C // 相当于int var_name
 
 [初始化参考代码](./code/day11/demo3.cpp) 
 
+
+[back to top](# 目录)
 # day12
 
 ## 构造函数 constructor
@@ -948,6 +962,8 @@ class Player : public Entity
 
 ```
 
+
+[back to top](# 目录)
 # day13
 
 ## 数组
@@ -1098,6 +1114,8 @@ using namespace std;
 
 ```
 
+
+[back to top](# 目录)
 # day14(TODO)
 
 ## 虚函数
@@ -1107,6 +1125,8 @@ using namespace std;
 ## 可见性
 
 
+
+[back to top](# 目录)
 # TODO
 
 - [ ] cpp中的link原理

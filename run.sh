@@ -1,5 +1,6 @@
 #!/bin/bash
 . ./toc.sh
+python3 src/to_top.py
 repository_ssh_url=git@github.com:mikaizhu/CppNotes.git
 # we can use command : git remote -v to see what url is
 # git 有时候会忽略大小写，这里我们要设置大小写识别，使用下面代码
