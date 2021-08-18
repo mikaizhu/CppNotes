@@ -1,4 +1,7 @@
+# 目录
+
 <!--ts-->
+* [目录](#目录)
 * [cpp教程推荐](#cpp教程推荐)
 * [环境搭配](#环境搭配)
    * [Linux](#linux)
@@ -51,7 +54,7 @@
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月18日 星期三 16时40分36秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月18日 星期三 20时09分19秒 CST -->
 
 <!--te-->
 # cpp教程推荐
@@ -946,6 +949,7 @@ class Player : public Entity
 ```
 int list[5]; // 一定要声明array的大小
 int list[5] = {1, 2, 3, 4, 5};
+int list[] = {1, 2, 3, 4, 5};
 ```
 
 - 当我们定义了一个array的时候，这个array其实就是一个指针，如list
@@ -1021,6 +1025,7 @@ int getaverage3(int *list, int size)
 - 注意点2: 接受函数返回的指针，必须要定义一个指针
 - 注意点3: 这里必须使用static，因为是局部变量，当函数调用完后，内部的内存都会销毁，使用static可以保证不会销毁，如果不加static， 那么打印出来的随机的，不是1 2 3
 
+[参考代码](./code/day13/demo3.cpp) 
 
 ```
 const int size = 3;
@@ -1047,8 +1052,38 @@ int* GetList()
 
 ## 字符串
 
+- [参考代码](./code/day13/demo4.cpp) 
 
+字符串的定义：(有下面三种)
 
+```
+    const char* name = "rike and morty";
+
+    char name2[] = {'r', 'i', 'k', 'e', '\0'};
+
+    char name3[] = {'r', 'i', 'k', 'e', 0};
+```
+
+字符串的访问和修改：
+
+```
+    char* name = "rike and morty";
+    name[5] = "A"
+```
+
+使用内置的string模块
+
+```
+#include <string>
+using namespace std;
+
+    string name4 = "rike and morty";
+    cout << "name4 is: " << name4 << endl;
+
+    string name5 = string("rike") + "and morty"; // 两个字符串相加
+    cout << "name5 is: " << name5 << endl;
+
+```
 
 # day14(TODO)
 
