@@ -10,7 +10,7 @@ import os
 # python 文本读取
 # python 插入文字进去
 # python 查找文字
-file = "./README.md"
+file = "../README.md"
 
 content = []
 with open(file) as f:
@@ -25,7 +25,7 @@ content.pop(0)
 content.pop(1)
 
 front_line = ""
-add_content = f"\n[back to top](#目录)\n"
+add_content = "\n[back to top](#目录)\n"
 
 with open(file) as f:
     for line in f:
@@ -35,7 +35,7 @@ with open(file) as f:
             front_line += line
 
 front_line = ""
-add_content = f"\n[back to top](# 目录)\n"
+add_content = f"\n[back to top](#目录)\n"
 pre_line = ""
 
 with open(file) as f:
