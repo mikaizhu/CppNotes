@@ -54,16 +54,15 @@
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月19日 星期四 11时16分22秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月19日 星期四 11时19分15秒 CST -->
 
 <!--te-->
 
-
-[【↥ back to top】](#目录)
 # cpp教程推荐
 
 - 【B站】https://space.bilibili.com/364152971/video?tid=0&page=3&keyword=&order=pubdate
 - 【菜鸟教程基本语法】https://www.runoob.com/cplusplus/cpp-tutorial.html
+
 
 
 [【↥ back to top】](#目录)
@@ -99,6 +98,7 @@ cMake 的流程是：
 4. 运行可执行文件
 
 [参考视频](bilibili.com/video/BV16V411k7eF?from=search&seid=16111676939071467556) 
+
 
 
 [【↥ back to top】](#目录)
@@ -150,6 +150,7 @@ g++ main.cpp -o main
 ./main
 ```
 
+
 [【↥ back to top】](#目录)
 # Day2 Cmake
 
@@ -186,6 +187,7 @@ make
 
 方法2：[参考代码](./code/day2/demo2/CMakeLists.txt) 
 
+
 [【↥ back to top】](#目录)
 # Day3 Link and Compile
 
@@ -221,6 +223,7 @@ int main()
 现里面没有代码
 #endif
 ```
+
 
 [【↥ back to top】](#目录)
 # day4 控制流语句
@@ -286,6 +289,7 @@ else
 - [参考代码1](./code/day4/demo4.cpp) 
 - [参考代码2](./code/day4/demo5.cpp) 
 
+
 [【↥ back to top】](#目录)
 # day5 变量和基本类型
 
@@ -316,6 +320,7 @@ std::cout << "char_b is " << char_b << std::endl;
 std::cout << "int_a is " << int_a << std::endl;
 std::cout << "int_b is " << int_b << std::endl;
 ```
+
 
 [【↥ back to top】](#目录)
 # day6 函数 和 头文件
@@ -474,6 +479,7 @@ struct Player{};
 2. 使用引号则出现在相对路径，如`../test.h`, `test.h`
 
 
+
 [【↥ back to top】](#目录)
 # day7 控制流语句 continue return break
 
@@ -482,6 +488,7 @@ struct Player{};
 return 是退出当前函数，后面代码都不会执行
 
 break是退出当前循环，执行循环外的代码
+
 
 
 [【↥ back to top】](#目录)
@@ -775,6 +782,7 @@ int main()
     Function();
 }
 ```
+
 
 
 [【↥ back to top】](#目录)
