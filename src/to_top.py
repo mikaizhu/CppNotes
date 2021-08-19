@@ -22,17 +22,7 @@ with open(file) as f:
                 continue
 
 content.pop(0)
-content.pop(1)
-
-front_line = ""
-add_content = "\n[back to top](#目录)\n"
-
-with open(file) as f:
-    for line in f:
-        if line.split('#')[-1].strip() in content:
-            front_line += add_content + line
-        else:
-            front_line += line
+content.pop(0)
 
 front_line = ""
 add_content = f"\n[【↥ back to top】](#目录)\n"
