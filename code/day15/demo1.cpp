@@ -1,67 +1,101 @@
 #include <iostream>
+#include <string>
+//#include <cctype>
+
 using namespace std;
+//using string;
+//using 
 
-// 两数之积
-int TwoNumMulty()
+void define()
 {
-    int num1, num2;
-    cout << "input num1: ";
-    cin >> num1;
-    cout << "input num2: ";
-    cin >> num2;
-    cout << num1 * num2 << endl;
-    return 0;
-}
-// 50到100整数相加
-void Sum()
-{
-    int sum = 0;
-    for (int i = 50; i <= 100; i++)
-    {
-        sum += i;
-    }
-    cout << "Sum is: " << sum << endl;
+    string s1 = "value";
+    string s2; // 默认初始化为0字符串
+    string s3("value"); // s3 为 value的副本
+    cout << s1 << endl;
+    cout << s2 << endl;
+    cout << s3 << endl;
 }
 
-// 10-0倒叙打印
-void Print10_0()
+void operation()
 {
-    for (int i = 10; i >= 0; i--)
+    string s1 = "value 1 ";
+    string s2 = "value 2";
+    cout << "size of s1 is: " << s1.size() << endl;
+    cout << "s1[" << 2 << "] is: " << s1[2] << endl;
+    cout << "s1 + s2 is: " << s1 + s2 << endl;
+    //cout << "s1[1] is num ?" << std::string.isdigit(s1[1]) << endl;
+    //cout << "2 is num ?" << isdigit("2") << endl;
+
+    //string s3;
+    //s3 << s1;
+    //cout << s3 << endl;
+}
+
+void compare()
+{
+    string s1, s2;
+    cout << "Please input 2 string" << endl;
+    for (int i = 2; i > 0; i--)
     {
-        cout << i << endl;
+        if (i == 2)
+        {
+            cout << "input the first string: ";
+            cin >> s1;
+        }
+        else
+        {
+            cout << "input the second string: ";
+            cin >> s2;
+        }
+    }
+    if (s1.size() == s2.size())
+    {
+        cout << "tow strings are equal" << endl;
+    }
+    else
+        cout << "the larger string is: " << ((s1.size() > s2.size()) ? s1 : s2) << endl;
+}
+
+void input()
+{
+    string s;
+    cout << "please input something: ";
+    while (getline(cin, s))
+    {
+        cout << s << endl;
+        cout << "please input something: ";
     }
 }
 
-// print input iterger num in num1 and num2
-void Print_num1_num2()
+void concate()
 {
-    int num1, num2;
-    cout << "input num1: ";
-    cin >> num1;
-    cout << "input num2: ";
-    cin >> num2;
-    for ( ; num1 <= num2 ; num1++)
+    string s = "", s1;
+    while (cin >> s1)
     {
-        cout << num1 << " ";
+        s += s1 + " ";
     }
+    cout << "input string is: " << s << endl;
 }
 
-void Add_series_num()
+void replace()
 {
-    int sum = 0, num;
-    while (cin >> num)
+    string s = "hello world";
+    string *c = &s;
+    cout << c << endl;
+    for (char &c : s)
     {
-        sum += num;
+        cout << c << endl;
     }
-    cout << "sum of input is: " << sum << endl;
+    cout << s << endl;
 }
 
 
 int main()
 {
-    //TwoNumMulty();
-    //Sum();
-    //Print10_0();
-    //Print_num1_num2();
-    Add_series_num();
+    //define();
+    //operation();
+    //input();
+    //compare();
+    //concate();
+    replace();
 }

@@ -3,6 +3,7 @@
 <!--ts-->
 * [目录](#目录)
 * [cpp教程推荐](#cpp教程推荐)
+* [学习路线](#学习路线)
 * [环境搭配](#环境搭配)
    * [Linux](#linux)
    * [Mac](#mac)
@@ -15,6 +16,9 @@
    * [while &amp; for 循环](#while--for-循环)
    * [if else 语句](#if-else-语句)
 * [day5 变量和基本类型](#day5-变量和基本类型)
+   * [基本变量](#基本变量)
+   * [字面值常量](#字面值常量)
+   * [转义序列](#转义序列)
 * [day6 函数 和 头文件](#day6-函数-和-头文件)
    * [函数](#函数)
    * [函数声明 变量声明](#函数声明-变量声明)
@@ -25,6 +29,7 @@
 * [day8 指针 引用](#day8-指针-引用)
    * [指针](#指针)
    * [引用](#引用)
+   * [常量指针和指针常量](#常量指针和指针常量)
 * [day9 类](#day9-类)
    * [类的定义](#类的定义)
    * [class &amp; struct 的区别](#class--struct-的区别)
@@ -48,15 +53,17 @@
       * [传递数组给函数](#传递数组给函数)
       * [从函数返回数组](#从函数返回数组)
    * [字符串](#字符串)
-   * [字符串字面量(TODO)](#字符串字面量todo)
-* [day16 知识巩固](#day16-知识巩固)
+* [day14 知识巩固](#day14-知识巩固)
+* [day15](#day15)
+   * [字符串补充](#字符串补充)
+   * [vector](#vector)
 * [day15(TODO)](#day15todo)
    * [虚函数](#虚函数)
    * [纯虚函数](#纯虚函数)
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月19日 星期四 20时40分00秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月22日 星期日 15时44分16秒 CST -->
 
 <!--te-->
 
@@ -65,6 +72,27 @@
 - 【B站】https://space.bilibili.com/364152971/video?tid=0&page=3&keyword=&order=pubdate
 - 【菜鸟教程基本语法】https://www.runoob.com/cplusplus/cpp-tutorial.html
 
+[【↥ back to top】](#目录)
+
+
+[【↥ back to top】](#目录)
+# 学习路线
+
+1. 语言本身学习
+
+c++ 的重点主要是两个，指针和内存管理， 推荐书籍 c++ prime plus, 学习语言要快速
+学完，不要拖太久.
+
+2. 基础四大件的学习
+
+四大件包括：1. 数据结构与算法(大话数据结构)，2. 计算机网络(TCP/IP详解) 3. 操作系统，4. 设计模式(大话设计模式)
+
+3. 编程和实践
+
+主要包括下面几个步骤：1. Linux的学习，包括脚本学习 2. 编程调试，包括gcc编译，
+makefile(跟我一起写makefile)，gdb调试(debugging with gdb 中文版) 
+
+4. linux 环境编程(unix 环境高级编程)
 
 
 [【↥ back to top】](#目录)
@@ -263,6 +291,21 @@ for (; condition ; )
 
 - [参考代码](./code/day4/demo6.cpp) 
 
+补充, 范围for语句：(主要遍历容器或者序列, cpp11引入的)
+
+```
+for (declaration : expression) // expression 必须是一个序列， 数组， vector，
+  or string类型的对象
+  statement  // statement 可以是单独的一个语句，也可以是一个语句块
+```
+常用的写法：
+```
+vector<int> v = {0, 1, 2, 3}
+for (auto &r : v)
+{
+    r *= 2; // 将v中的每个元素值翻倍
+}
+```
 
 ## if else 语句
 
@@ -295,6 +338,8 @@ else
 [【↥ back to top】](#目录)
 # day5 变量和基本类型
 
+## 基本变量
+
 cpp中含有很多数据类型，如：字符型，整型，浮点数等。这些数据的唯一本质区别就在于，
 所占的内存大小不一样.
 
@@ -325,7 +370,74 @@ std::cout << "char_b is " << char_b << std::endl;
 std::cout << "int_a is " << int_a << std::endl;
 std::cout << "int_b is " << int_b << std::endl;
 ```
+## 字面值常量
 
+整型字面值:
+
+像32，3.14这样的数字，称作字面值常量，即 `变量=字面值常量`，其中32这种是int类
+型的字面值常量，3.14是double类型的字面值常量。
+
+整数的字面值常量，可以用
+
+- 2进制，
+- 8进制(024)
+- 10进制(20)
+- 16进制表示(0x16)
+
+通过后缀，可以将字面值常量转换成long，unsigned, unsigned long类型
+
+- 20L(long)
+- 20U(unsigned)
+- 20UL(unsigned long)
+
+浮点数字面值：用科学计数法或者10进制表示
+
+- 3.14f(3.14e0f)(3.14E0f)
+- 0.(0e0)
+
+布尔字面值：
+
+- true false
+
+非打印字符字面值：
+
+- \n
+- \t
+- \r
+
+字符字面值：
+
+- 单引号 'a'
+
+字符串字面值：
+
+- "Hello world"
+
+字符串拼接
+```
+std::cout << "Hello " 
+"world" << std::endl;
+```
+
+多行字面值：
+
+```
+st\
+d:cout << "hello world" << std::e\
+ndl;
+```
+
+## 转义序列
+
+参考：https://blog.csdn.net/zzuchengming/article/details/52745536
+
+总结：字符串中，`\x` 后面加16进制的数字，后面数字都会用到，对应ascii码表， `\`
+后加1-3位的8进制数值，第四个数字就不算了，对应ascii码表.
+
+```
+cout << "\x1234" << endl;
+cout << "\1234" << endl;
+```
 
 [【↥ back to top】](#目录)
 # day6 函数 和 头文件
@@ -507,6 +619,7 @@ break是退出当前循环，执行循环外的代码
 
 ```
 使用int* p; 来创建指针
+或者使用 int *p 这两种写法没有区别
 
 使用&p来访问变量的地址
 
@@ -515,12 +628,34 @@ break是退出当前循环，执行循环外的代码
 
 [参考代码](./code/day8/demo1.cpp) 
 
+```
+int i = 42;
+int *p1 = &i;
+*p1 = *p1 * *p1;
+```
+
+这段代码的作用是修改p1内存中的数值
+
 ## 引用
 
 引用并不占用内存，引用只是指针的另一个名字
 
 [参考代码](./code/day8/demo2.cpp) 
 
+## 常量指针和指针常量
+
+常量指针：只能读取内存的数据，但是不能修改内存的数据
+
+```
+int const *p;
+const int *p;
+```
+
+指针常量：指针指向的位置不能变，但是内存的内容可以改变
+
+```
+int* const p;
+```
 
 [【↥ back to top】](#目录)
 # day9 类
@@ -1119,15 +1254,143 @@ using namespace std;
 
     string name5 = string("rike") + "and morty"; // 两个字符串相加
     cout << "name5 is: " << name5 << endl;
-
 ```
-## 字符串字面量(TODO)
+
+[【↥ back to top】](#目录)
+# day14 知识巩固
+
+- [参考代码](./code/day14/demo1.cpp) 
+- [参考代码](./code/day14/demo2.cpp) 
 
 
 [【↥ back to top】](#目录)
-# day16 知识巩固
+# day15
 
+## 字符串补充
 
+1. 输入流和输出流：
+
+- std::cin 输入流 从第一个非空白字符开始, 到下一个空白字符结束
+- std::cout 输出流
+
+2. 字符串拼接
+
+字符串字面值和string类型不一样，字符串字面值是不能直接拼接的，
+
+```
+string("Hello") + "world" // 其中一个必须是string类型
+```
+
+3. getline(InputStream, s)
+
+接受输入，直到用户输入换行停止
+
+```
+// getline从输入流中得到一行字符串，然后赋值给s，输入流就是会在终端显示，要求
+用户输入
+
+using namespace std;
+string s;
+cout << "please input something: ";
+while (getline(cin, s)) // cin是返回输入流
+{
+    cout << s << endl;
+    cout << "please input something: ";
+}
+```
+
+4. 比较字符串长度 s.size() 和字符串大小
+
+字符串长度：
+
+```
+s1.size() >= s2.size();
+```
+
+字符串大小：从左到右，逐个字符比较，ascii码比较大的那个.
+
+5. 字符串的拼接
+
+```
+void concate()
+{
+    string s = "", s1;
+    while (cin >> s1)
+    {
+        s += s1 + " ";
+    }
+    cout << "input string is: " << s << endl;
+}
+```
+
+6. 字符串遍历
+
+在cpp11中，使用下面方式遍历字符串, `for (auto c : string)`  
+
+```
+string s = "hello world";
+string *c = &s;
+cout << c << endl;
+cout << *c << endl;
+for (auto c : s)
+{
+    cout << c << endl;
+}
+```
+
+如果想改变字符串里面的内容：
+
+```
+for (auto &c : s)
+{
+    if (c == ' ')
+        continue;
+    else
+        c = 'X';
+}
+cout << s << endl;
+```
+
+上面这种写法是范围for语句，不同于传统的for语句，是cpp11的特性.
+
+## vector
+
+1. 使用
+
+```
+#include <vector> // vector 本身是一个容器，是一个类模板
+unsing std::vector;
+```
+
+2. 定义和初始化
+
+```
+vector<int> ivec;  // vector后面加尖括号，里面设置类型
+
+vector<int> v1;
+vector<int> v2 = v1;
+vector<int> v3{a, b, c, d...}
+vector<int> v4 = {a, b, c, d...}
+```
+
+3. 向vector中添加元素
+
+```
+v.push_back(e) // 在尾部添加元素
+```
+
+4. 其他vector操作
+
+- `v.size()` 返回元素的个数
+- `v.push_back(t)` 
+- `v[n]` 
+- `v1 == v2` 
+- `v1 != v2` 
+- `<, <=, >, >=` 
+
+5. 迭代器
+
+所有容器都可以使用迭代器的功能
 
 
 [【↥ back to top】](#目录)
