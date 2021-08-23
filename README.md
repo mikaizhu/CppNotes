@@ -9,9 +9,9 @@
    * [Mac](#mac)
    * [运行逻辑](#运行逻辑)
    * [CMake](#cmake)
-* [Day1 HelloWorld](#day1-helloworld)
-* [Day2 Cmake](#day2-cmake)
-* [Day3 Link and Compile](#day3-link-and-compile)
+* [day1 HelloWorld](#day1-helloworld)
+* [day2 Cmake](#day2-cmake)
+* [day3 Link and Compile](#day3-link-and-compile)
 * [day4 控制流语句](#day4-控制流语句)
    * [while &amp; for 循环](#while--for-循环)
    * [if else 语句](#if-else-语句)
@@ -19,6 +19,7 @@
    * [基本变量](#基本变量)
    * [字面值常量](#字面值常量)
    * [转义序列](#转义序列)
+   * [打印数据类型](#打印数据类型)
 * [day6 函数 和 头文件](#day6-函数-和-头文件)
    * [函数](#函数)
    * [函数声明 变量声明](#函数声明-变量声明)
@@ -63,7 +64,7 @@
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月22日 星期日 15时44分16秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月23日 星期一 17时19分28秒 CST -->
 
 <!--te-->
 
@@ -71,8 +72,6 @@
 
 - 【B站】https://space.bilibili.com/364152971/video?tid=0&page=3&keyword=&order=pubdate
 - 【菜鸟教程基本语法】https://www.runoob.com/cplusplus/cpp-tutorial.html
-
-[【↥ back to top】](#目录)
 
 
 [【↥ back to top】](#目录)
@@ -132,7 +131,7 @@ cMake 的流程是：
 
 
 [【↥ back to top】](#目录)
-# Day1 HelloWorld
+# day1 HelloWorld
 
 创建文件：(cpp 文件主要都是以.cpp结尾)
 
@@ -182,7 +181,7 @@ g++ main.cpp -o main
 
 
 [【↥ back to top】](#目录)
-# Day2 Cmake
+# day2 Cmake
 
 - [Cmake书籍](https://github.com/xiaoweiChen/CMake-Cookbook/tree/master/content) 
 - [Cmake视频教程](bilibili.com/video/BV16V411k7eF?p=2) 
@@ -219,7 +218,7 @@ make
 
 
 [【↥ back to top】](#目录)
-# Day3 Link and Compile
+# day3 Link and Compile
 
 Compile: 编译的作用就是将cpp代码转换成计算机可执行的二进制文件。**注意, 文件名字不重
 要，.cpp告诉编译器是该文件是cpp文件，当然你也可以告诉编译器是其他文件**, 编译
@@ -437,6 +436,26 @@ ndl;
 ```
 cout << "\x1234" << endl;
 cout << "\1234" << endl;
+```
+
+## 打印数据类型
+
+- 使用typeid(variable).name(), 不过这样打印的是类型的缩写
+
+```
+void GetType(char data)
+{
+    cout << "input data type is: " << typeid(data).name() << endl;
+}
+
+
+int main()
+{
+    float num = 0.;
+    char name = 'A';
+    GetType(name);
+    cout << "input data type is: " << typeid(GetType).name() << endl;
+}
 ```
 
 [【↥ back to top】](#目录)
@@ -1390,8 +1409,55 @@ v.push_back(e) // 在尾部添加元素
 
 5. 迭代器
 
-所有容器都可以使用迭代器的功能
+所有容器都可以使用迭代器的功能, 我们可以通过下标来访问容器里面的元素内容，也可
+以使用迭代器来访问容器内容。
 
+使用迭代器：有迭代器的类型同时拥有返回迭代器的成员(begin & end)，begin成员负责
+返回指向第一个元素的迭代器，end返回尾元素的下一个位置的迭代器，叫尾后迭代器，
+尾后迭代器没什么意义，仅仅是个标记而已。
+
+迭代器运算符：
+
+| *iter                            | 返回迭代器iter所指元素的引用                                     |
+|----------------------------------|------------------------------------------------------------------|
+| iter++                           | 令iter指示容器中的下一个元素                                     |
+|----------------------------------|------------------------------------------------------------------|
+| iter--                           | 令iter指示容器中的上一个元素                                     |
+|----------------------------------|------------------------------------------------------------------|
+| iter1 == iter2  & iter1 != iter2 | 判断两个迭代器是否相等，如果相等，则两个迭代器指示的是同一个元素 |
+
+迭代器类型：
+
+准确来说是迭代器返回的类型是什么？(迭代器的类型 iterator and const_iterator)
+
+```
+    string name = "miki zhu";
+    auto it = name.begin();
+    cout << "input data type is: " << typeid(it).name() << endl;
+```
+
+遍历迭代器内容：
+
+```
+string name = "miki zhu";
+for (auto it = name.begin(); it != name.end(); ++it)
+{
+    cout << *it << endl; // 使用*it返回引用
+}
+```
+
+迭代器解引用：我们知道string对象中，有自己的一些方法，或者类对象中有自己的一些
+方法，我们可以通过解引用继续调用类对象中的方法, 写法如下：
+
+```
+*(it).empty()
+```
+
+c++ 中定义了箭头运算符(->)
+
+```
+*(it).empty(); and it->empty(); 两个写法一样
+```
 
 [【↥ back to top】](#目录)
 # day15(TODO)
