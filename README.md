@@ -58,13 +58,23 @@
 * [day15](#day15)
    * [字符串补充](#字符串补充)
    * [vector](#vector)
+      * [使用](#使用)
+      * [定义和初始化](#定义和初始化)
+      * [向vector中添加元素](#向vector中添加元素)
+      * [其他vector操作](#其他vector操作)
+      * [迭代器](#迭代器)
+      * [函数返回和读取一个张量](#函数返回和读取一个张量)
+      * [向量的拷贝](#向量的拷贝)
+   * [数组补充](#数组补充)
+      * [数组中的拷贝](#数组中的拷贝)
+      * [获得数组的长度(begin end)](#获得数组的长度begin-end)
 * [day15(TODO)](#day15todo)
    * [虚函数](#虚函数)
    * [纯虚函数](#纯虚函数)
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月23日 星期一 17时19分28秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月24日 星期二 15时30分05秒 CST -->
 
 <!--te-->
 
@@ -1291,6 +1301,7 @@ using namespace std;
 
 - std::cin 输入流 从第一个非空白字符开始, 到下一个空白字符结束
 - std::cout 输出流
+- 如果要读取一行，使用`getline(cin, stringVar)`，如果想读取一个单词，以空格分隔，直接使用`cin`
 
 2. 字符串拼接
 
@@ -1374,14 +1385,14 @@ cout << s << endl;
 
 ## vector
 
-1. 使用
+### 使用
 
 ```
 #include <vector> // vector 本身是一个容器，是一个类模板
 unsing std::vector;
 ```
 
-2. 定义和初始化
+### 定义和初始化
 
 ```
 vector<int> ivec;  // vector后面加尖括号，里面设置类型
@@ -1392,13 +1403,13 @@ vector<int> v3{a, b, c, d...}
 vector<int> v4 = {a, b, c, d...}
 ```
 
-3. 向vector中添加元素
+### 向vector中添加元素
 
 ```
 v.push_back(e) // 在尾部添加元素
 ```
 
-4. 其他vector操作
+### 其他vector操作
 
 - `v.size()` 返回元素的个数
 - `v.push_back(t)` 
@@ -1407,7 +1418,7 @@ v.push_back(e) // 在尾部添加元素
 - `v1 != v2` 
 - `<, <=, >, >=` 
 
-5. 迭代器
+### 迭代器
 
 所有容器都可以使用迭代器的功能, 我们可以通过下标来访问容器里面的元素内容，也可
 以使用迭代器来访问容器内容。
@@ -1419,11 +1430,8 @@ v.push_back(e) // 在尾部添加元素
 迭代器运算符：
 
 | *iter                            | 返回迭代器iter所指元素的引用                                     |
-|----------------------------------|------------------------------------------------------------------|
 | iter++                           | 令iter指示容器中的下一个元素                                     |
-|----------------------------------|------------------------------------------------------------------|
 | iter--                           | 令iter指示容器中的上一个元素                                     |
-|----------------------------------|------------------------------------------------------------------|
 | iter1 == iter2  & iter1 != iter2 | 判断两个迭代器是否相等，如果相等，则两个迭代器指示的是同一个元素 |
 
 迭代器类型：
@@ -1457,6 +1465,108 @@ c++ 中定义了箭头运算符(->)
 
 ```
 *(it).empty(); and it->empty(); 两个写法一样
+```
+
+### 函数返回和读取一个张量
+
+- 函数返回一个张量
+
+```
+vector<int> Return()
+{
+    vector<int> vec = {1, 2, 3};
+    return vec;
+}
+```
+
+- 函数读取一个张量
+
+```
+void InputVec(vector<int> vec)
+{
+    for (auto &ele : vec)
+        cout << ele << endl;
+}
+```
+
+### 向量的拷贝
+
+```
+vector<int> vec = Return();
+vector<int> vec1(vec);
+```
+
+- [参考代码](./code/day15/demo3.cpp) 
+
+## 数组补充
+
+### 数组中的拷贝
+
+```
+int array1[3] = {1, 2, 3};
+int array2[3];
+for (int i = 0; i < 3; i++)
+    array2[i] = array1[i];
+```
+
+### 获得数组的长度(begin end)
+
+首先要include模块：(下面三个都有begin和end函数)
+
+```
+#include<string>
+#include<vector>
+#include<iterator>
+```
+
+使用下面方式获取数组长度:
+
+```
+int arr1[] = {1, 2, 3};
+int arr2[] = {2, 3, 4};
+
+len1 = end(arr1) - begin(arr1);
+len2 = end(arr2) - begin(arr2)
+```
+
+不能使用下面方式获得：(函数传入的是指针，不是数组，所以不能对指针使用begin)
+
+```
+bool CompareArray(int* array1, int* array2)
+{
+    int lengthA = end(array1) - begin(array1);
+    int lengthB = end(array2) - begin(array2);
+```
+
+正确代码如下：
+
+```
+bool CompareArray(int* p1, int* p2, int* p3, int* p4)
+{
+    // 先比较两个array的长度是不是一样，不一样就返回false
+    //int lengthA = sizeof(array1) / sizeof(array1[0]);
+    //int lengthB = sizeof(array2) / sizeof(array1[0]);
+    //cout << lengthA << ' '<< lengthB << endl;
+    int lengthA = p2 - p1;
+    int lengthB = p4 - p3;
+    cout << lengthA << ' '<< lengthB << endl;
+    if (lengthA != lengthB)
+        return false;
+    for(int i = 0; i < lengthA; i++)
+    {
+        if (*(p1 + i) != *(p2 + i))
+            return false;
+    }
+    return true;
+}
+
+int main()
+{
+    //const int *array;
+    //Init0();
+    int A[] = {1, 2, 3},  B[] = {2, 3, 4};
+    cout << CompareArray(begin(A), end(A), begin(B), end(B));
+}
 ```
 
 [【↥ back to top】](#目录)
