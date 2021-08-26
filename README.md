@@ -2,7 +2,7 @@
 
 <!--ts-->
 * [目录](#目录)
-* [cpp教程推荐](#cpp教程推荐)
+* [cpp推荐](#cpp推荐)
 * [学习路线](#学习路线)
 * [环境搭配](#环境搭配)
    * [Linux](#linux)
@@ -16,6 +16,7 @@
    * [while &amp; for 循环](#while--for-循环)
    * [if else 语句](#if-else-语句)
 * [day5 变量和基本类型](#day5-变量和基本类型)
+   * [命名空间](#命名空间)
    * [基本变量](#基本变量)
    * [字面值常量](#字面值常量)
    * [转义序列](#转义序列)
@@ -73,22 +74,31 @@
       * [常见运算符](#常见运算符)
       * [sizeof 运算符](#sizeof-运算符)
       * [逗号运算符](#逗号运算符)
-   * [类型转换(TODO)](#类型转换todo)
+   * [类型转换](#类型转换)
+   * [隐式转换：(看操作符是左结合律还是右结合律)](#隐式转换看操作符是左结合律还是右结合律)
+   * [显式转换(强制类型转换)](#显式转换强制类型转换)
 * [day??(TODO)](#daytodo)
    * [虚函数](#虚函数)
    * [纯虚函数](#纯虚函数)
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月25日 星期三 11时35分49秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月26日 星期四 16时22分06秒 CST -->
 
 <!--te-->
 
-# cpp教程推荐
+# cpp推荐
+
+教程推荐
 
 - 【B站】https://space.bilibili.com/364152971/video?tid=0&page=3&keyword=&order=pubdate
 - 【菜鸟教程基本语法】https://www.runoob.com/cplusplus/cpp-tutorial.html
 
+书籍推荐：
+
+- C++语言的设计和演化
+- c++primer
+- effective c++
 
 [【↥ back to top】](#目录)
 # 学习路线
@@ -352,6 +362,79 @@ else
 
 [【↥ back to top】](#目录)
 # day5 变量和基本类型
+
+## 命名空间
+
+- [参考1](https://blog.csdn.net/cherishinging/article/details/73810785) 
+- [参考2](https://blog.csdn.net/qq_40416052/article/details/82528676?utm_medium=distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.control&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-1.control) 
+
+总结：就是为了避免重复，当文件中想引用两个人写的代码，两份代码中有重复的函数名
+或者变量名, 如果按下面的方式，那么程序就会报错
+
+```
+#include "PeopleA.h"
+#include "PeopleB.h"
+
+...
+```
+
+解决办法就是使用命名空间：在写代码的时候加入下面语句
+
+```
+namespace peopleA;
+```
+
+namespace是定义命名空间锁必须写的关键字，AA是自己制定的命名空间的名字。如果在程序中要使用a和b，必须加上命名空间名和作用域分辨符::，如AA::a，AA::b，这种用法称为命名空间限定。
+命名空间的作用是建立一些互相分隔的作用域，把一些全局实体分隔开来，以免产生名字冲突。
+
+调用命名空间：
+
+```
+using namespace std;
+using std::cin;
+```
+
+命名空间例子：
+
+```
+namespace version1
+{
+void FindOdd()
+{
+    vector<int> vec = {1, 2, 3, 4, 5, 6};
+    for (auto &i : vec)
+    {
+        if (i & 01)
+            i *= 2;
+    }
+    for (auto &i : vec)
+        cout << i << " ";
+    cout << endl;
+}
+}
+
+namespace version2
+{
+void FindOdd()
+{
+    cout << "version2" << endl;
+    vector<int> vec = {1, 2, 3, 4, 5, 6};
+    for (auto &i : vec)
+    {
+        cout << (i & 01 ? i*=2:i) << " ";
+    }
+    cout << endl;
+}
+}
+
+int main()
+{
+    //test();
+    version2::FindOdd();
+}
+```
+
+
 
 ## 基本变量
 
@@ -1671,6 +1754,35 @@ FinalGrad = (grade > 90) ? "high pass" : (grad < 60) ? "fail" : "pass";
 sizeof(ia) / sizeof(*ia)
 ```
 
+实战：
+
+```
+// 源代码
+void FindOdd()
+{
+    vector<int> vec = {1, 2, 3, 4, 5, 6};
+    for (auto &i : vec)
+    {
+        if (i & 01)
+            i *= 2;
+    }
+    for (auto &i : vec)
+        cout << i << " ";
+    cout << endl;
+}
+
+// 代码优化
+void FindOdd()
+{
+    cout << "version2" << endl;
+    vector<int> vec = {1, 2, 3, 4, 5, 6};
+    for (auto &i : vec)
+    {
+        cout << (i & 01 ? i*=2:i) << " ";
+    }
+    cout << endl;
+}
+```
 
 ### 逗号运算符
 
@@ -1686,7 +1798,72 @@ for(int ix = 0; ix != ivec.size(); ++ix, --cnt)
 for循环中，ix递增，cnt递减，每次循环两个变量都相应改变，只要ix满足条件，就把元
 素设置成cnt当前的值
 
-## 类型转换(TODO)
+## 类型转换
+
+假设有如下定义：
+
+```
+char cval;
+int ival;
+unsigned int ui;
+float fval;
+double dval;
+```
+
+## 隐式转换：(看操作符是左结合律还是右结合律)
+
+```
+cval = 'a' + 3; // 因为+号为左表达式，所以先会计算左边，因为int比char大，将'a' 转换成整型int，
+然后与3相加，再转换成char类型
+
+fval = ui -ival * 1.0; // double 比int精度更高，所以ival会从int转换成double，
+ui也会转换成double， 最后转换结果为float
+```
+
+## 显式转换(强制类型转换)
+
+- [参考1](https://blog.csdn.net/luolaihua2018/article/details/111996610)
+- [参考2](https://blog.csdn.net/kai_zone/article/details/102932887?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-0.base&spm=1001.2101.3001.4242) 
+
+假设:
+
+```
+int i;
+double d;
+```
+
+书写表达式`i *= d`，使其执行整数类型的乘法而非浮点类型的乘法。
+
+分析：
+
+```
+i = i * d; // 本来的执行过程是隐式转换，先将i转换成double类型，与d相乘，然后转
+换成int类型
+```
+
+转换：
+
+```
+i *= static_cast<int>(d);
+```
+
+使用强制类型转换改写下列的转换语句：
+
+```
+int i; double d; const string *ps; char *pc; void *pv;
+
+(a) pv = (void*)ps;
+(b) i = int(*pc);
+(c) pv = &d;
+(d) pc = (char*)pv;
+```
+
+```
+(a) pv = static_cast<void*>(const_cast<string*>(ps));
+(b) i = static_cast<int>(*pc);
+(c) pv = static_cast<void*>(&d);
+(d) pc = static_cast<char*>(pv);
+```
 
 
 [【↥ back to top】](#目录)
