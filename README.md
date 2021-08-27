@@ -77,13 +77,19 @@
    * [类型转换](#类型转换)
    * [隐式转换：(看操作符是左结合律还是右结合律)](#隐式转换看操作符是左结合律还是右结合律)
    * [显式转换(强制类型转换)](#显式转换强制类型转换)
+* [day17 语句](#day17-语句)
+   * [空语句](#空语句)
+   * [程序块](#程序块)
+   * [悬垂else](#悬垂else)
+   * [switch语句](#switch语句)
+   * [try语句块和异常处理(TODO)](#try语句块和异常处理todo)
 * [day??(TODO)](#daytodo)
    * [虚函数](#虚函数)
    * [纯虚函数](#纯虚函数)
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月26日 星期四 16时22分06秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月27日 星期五 13时35分43秒 CST -->
 
 <!--te-->
 
@@ -93,6 +99,11 @@
 
 - 【B站】https://space.bilibili.com/364152971/video?tid=0&page=3&keyword=&order=pubdate
 - 【菜鸟教程基本语法】https://www.runoob.com/cplusplus/cpp-tutorial.html
+
+Github:
+
+- [Cpp Primer 学习](https://github.com/applenob/Cpp_Primer_Practice) 
+- [Cpp things](https://github.com/Light-City/CPlusPlusThings) 
 
 书籍推荐：
 
@@ -1864,6 +1875,146 @@ int i; double d; const string *ps; char *pc; void *pv;
 (c) pv = static_cast<void*>(&d);
 (d) pc = static_cast<char*>(pv);
 ```
+
+[【↥ back to top】](#目录)
+# day17 语句
+
+## 空语句
+
+- 就一个分号
+- 如果在程序的某个地方，语法上需要一条语句但是逻辑上不需要，此时应该使用空语句。相当于python中的pass
+
+```
+for (int i = 0; i < 5; i++)
+    ;
+```
+
+## 程序块
+
+- 用花括号括起来的语句和声明的序列就是块。
+- 如果在程序的某个地方，语法上需要一条语句，而逻辑上需要多条语句，此时应该使用块
+
+```
+while (val <= 10) {
+	sum += val;
+	++val;
+}
+```
+## 悬垂else
+
+指的是这个else匹配的是最近没有匹配的if
+
+## switch语句
+
+- [参考链接](https://www.runoob.com/cplusplus/cpp-switch.html) 
+
+语法结构如下：(如果某个条件满足，则会继续执)
+
+```
+switch(expression){
+    case constant-expression  :
+       statement(s);
+       break; // 可选的
+    case constant-expression  :
+       statement(s);
+       break; // 可选的
+  
+    // 您可以有任意数量的 case 语句
+    default : // 可选的
+       statement(s);
+}
+```
+
+- switch 语句中的 expression 必须是一个整型或枚举类型，或者是一个 class 类型，其中 class 有一个单一的转换函数将其转换为整型或枚举类型。
+
+- 当被测试的变量等于 case 中的常量时，case 后跟的语句将被执行(注意不会检查case是否满足条件，不满足也会执行)，直到遇到 break 语句为止。
+
+- 当遇到 break 语句时，switch 终止，控制流将跳转到 switch 语句后的下一行。
+
+- 不是每一个 case 都需要包含 break。如果 case 语句不包含 break，控制流将会继续后续的case，直到遇到 break 为止。
+
+- 一个 switch 语句可以有一个可选的 default case，出现在 switch 的结尾。default case 可用于在上面所有 case 都不为真时执行一个任务。default case 中的 break 语句不是必需的。
+
+参考代码：
+```
+char grade = 'D';
+ 
+switch(grade)
+{
+case 'A' :
+   cout << "很棒！" << endl; 
+   break;
+case 'B' :
+case 'C' :
+   cout << "做得好" << endl;
+   break;
+case 'D' :
+   cout << "您通过了" << endl;
+   break;
+case 'F' :
+   cout << "最好再试一下" << endl;
+   break;
+default :
+   cout << "无效的成绩" << endl;
+}
+cout << "您的成绩是 " << grade << endl;
+```
+
+## try语句块和异常处理(TODO)
+
+- 参考：https://www.runoob.com/cplusplus/cpp-exceptions-handling.html
+
+异常处理包括两个部分：
+
+- 捕获异常(try catch两个关键字)
+- 抛出异常(throw关键字)
+
+关键字说明：
+
+- 捕获异常的方法会使用 try 和 catch 关键字。try 块中放置可能抛出异常的代码，try 块中的代码被称为保护代码。
+- 在您想要处理问题的地方，通过异常处理程序捕获异常。catch 关键字用于捕获异常。
+- throw: 当问题出现时，程序会抛出一个异常。这是通过使用 throw 关键字来完成的。
+
+
+```
+try
+{
+   // 保护代码
+}catch( ExceptionName e1 )
+{
+   // catch 块
+}catch( ExceptionName e2 )
+{
+   // catch 块
+}catch( ExceptionName eN )
+{
+   // catch 块
+}
+```
+说明：如果 try 块在不同的情境下会抛出不同的异常，这个时候可以尝试罗列多个 catch 语句，用于捕获不同类型的异常。
+
+```
+try
+{
+   // 保护代码
+}catch( ExceptionName e )
+{
+  // 处理 ExceptionName 异常的代码
+}
+```
+
+上面的代码会捕获一个类型为 ExceptionName 的异常。如果您想让 catch 块能够处理 try 块抛出的任何类型的异常，则必须在异常声明的括号内使用省略号 ...，如下所示：
+
+```
+try
+{
+   // 保护代码
+}catch(...)
+{
+  // 能处理任何异常的代码
+}
+```
+
 
 
 [【↥ back to top】](#目录)
