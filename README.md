@@ -89,7 +89,7 @@
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月27日 星期五 13时35分43秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月28日 星期六 12时31分08秒 CST -->
 
 <!--te-->
 
@@ -110,6 +110,10 @@ Github:
 - C++语言的设计和演化
 - c++primer
 - effective c++
+- 电子书网站1: https://github.com/weaiken/ebook
+- 电子书网站2: https://github.com/justjavac/free-programming-books-zh_CN
+- 电子书网站3: https://github.com/itdevbooks/pdf
+
 
 [【↥ back to top】](#目录)
 # 学习路线
@@ -2015,6 +2019,22 @@ try
 }
 ```
 
+cpp中的异常处理逻辑是这样的:
+1. try代码块中放置可能会出现问题的代码块
+2. throw 在try代码块中抛出异常
+3. catch捕获throw抛出的异常
+
+```
+int main()
+{
+  try{
+    if (item1.isbn() != item2.isbn()) // try中处理可能会出现的异常，然后抛出
+      throw runtime_error("Data must refer to same ISBN");
+    } catch (runtime_error err) { // catch 捕获异常
+        cout << err.what() << "Try again?" << endl;
+      }
+}
+```
 
 
 [【↥ back to top】](#目录)
