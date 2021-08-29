@@ -82,14 +82,24 @@
    * [程序块](#程序块)
    * [悬垂else](#悬垂else)
    * [switch语句](#switch语句)
-   * [try语句块和异常处理(TODO)](#try语句块和异常处理todo)
+   * [try语句块和异常处理](#try语句块和异常处理)
+* [day18](#day18)
+   * [递归](#递归)
+   * [结构体](#结构体)
+      * [结构体定义和声明](#结构体定义和声明)
+      * [结构体数组](#结构体数组)
+      * [结构体指针](#结构体指针)
+      * [结构体嵌套结构体](#结构体嵌套结构体)
+      * [结构体为函数参数和返回值](#结构体为函数参数和返回值)
+      * [结构体中的const](#结构体中的const)
+   * [模板(TODO)](#模板todo)
 * [day??(TODO)](#daytodo)
    * [虚函数](#虚函数)
    * [纯虚函数](#纯虚函数)
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月28日 星期六 12时31分08秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月29日 星期日 16时51分31秒 CST -->
 
 <!--te-->
 
@@ -587,6 +597,16 @@ cpp中的函数定义，有下面几个步骤：
 ```
 - [参考代码](./code/day6/demo1.cpp) 
 
+注意：cpp中不允许在函数内再定义函数(下面方式是不允许的)
+
+```
+void func()
+{
+    void func1()
+    {}
+}
+```
+
 ## 函数声明 变量声明
 
 不管这个函数有没有，在哪个位置，我们在开头先声明，请看下面的情况:
@@ -769,6 +789,32 @@ int *p1 = &i;
 
 这段代码的作用是修改p1内存中的数值
 
+**指针变量占多大内存呢**？
+
+> 如果是在32位的操作系统，那么所有类型的指针变量都是4个字节，如果是64位的操作
+> 系统，所有类型指针变量占8个字节
+
+**空指针** :
+
+```
+int *p = NULL;
+```
+
+> 空指针指向的内存编号为0，空指针是为了初始化不知道指向什么位置的指针，指针都
+> 最好初始化。空指针都是不可以访问的，因为0-255内存地址，都是系统占用的，所以
+> 不能修改里面的值
+
+**野指针** : 野指针指，我们随意初始化指针位置，企图查看没有申请的内存地址里面
+的内容
+
+```
+int *p = (int)0x1100;
+cout << *p << endl;
+```
+
+上面句子在语法上是没问题，但是代码运行上会出错，因为我们没有申请这个地址，企图
+查看没有申请的地址的内容.
+
 ## 引用
 
 引用并不占用内存，引用只是指针的另一个名字
@@ -789,6 +835,8 @@ const int *p;
 ```
 int* const p;
 ```
+
+**记忆** : 看const是修饰什么，如`const *p` const修饰的是常量，说明不能修改指针的值，但地址可以改变;`int* const p` const修饰的是指针，说明指针指向的地址不能变, 但内部的数据可以改变
 
 [【↥ back to top】](#目录)
 # day9 类
@@ -1964,7 +2012,7 @@ default :
 cout << "您的成绩是 " << grade << endl;
 ```
 
-## try语句块和异常处理(TODO)
+## try语句块和异常处理
 
 - 参考：https://www.runoob.com/cplusplus/cpp-exceptions-handling.html
 
@@ -2035,6 +2083,200 @@ int main()
       }
 }
 ```
+
+[【↥ back to top】](#目录)
+
+
+[【↥ back to top】](#目录)
+# day18
+
+## 递归
+
+- 写一个计算阶层的函数
+
+```
+int fact(int i)
+{
+    try{
+        if (i < 0)
+            throw runtime_error("input num must be positive number");
+    } catch (runtime_error err) {
+        cout << err.what() << endl;
+        return 1;
+    }
+
+    return (i == 1) ? 1 : i * fact(i - 1);
+}
+```
+
+## 结构体
+
+### 结构体定义和声明
+
+结构体是用户自定义的数据类型，可以存放不同的数据类型
+
+**声明** :
+
+```
+struct Student {string name; int age; float grade};
+```
+
+**使用** :
+
+```
+Student s1 = {"miki", 21, 80}; // 定义1
+
+// 定义2
+
+s1.name = "miki";
+s1.age = 21;
+s1.grade = 80;
+```
+
+### 结构体数组
+
+**定义** : 
+
+```
+    struct student
+    {
+        string name;
+        int age;
+        float score;
+    };
+
+    // 定义结构体数组
+    student arr[3] = {
+        {"miki1", 21, 60},
+        {"miki2", 22, 70},
+        {"miki3", 23, 80},
+    };
+```
+
+**访问并修改** :
+
+```
+    // 修改结构体数组
+    arr[0].name = "miki0";
+
+    // 打印结构体数组
+    for (int i = 0; i < 3; i++)
+        cout << arr[i].name << arr[i].age << arr[i].score << endl;
+```
+
+### 结构体指针
+
+即通过指针访问结构体
+
+定义结构体指针：
+
+```
+    struct student
+    {
+        string name;
+        int age;
+        float score;
+    };
+    student s1;
+    student *p = &s1; // 这里指针必须是student类型
+
+```
+
+使用结构体指针访问：
+
+```
+    cout << p->name << p->age << p->score << endl;
+```
+
+### 结构体嵌套结构体
+
+```
+    struct student
+    {
+        string name;
+        int age;
+        float score;
+    };
+
+    struct teacher
+    {
+        string name;
+        int age;
+        student s1; // student 结构体必须出现在teacher结构体的后面
+    };
+    teacher t1;
+    t1.name = "miki";
+    t1.age = 32;
+    t1.s1.name = "miki2";
+    t1.s1.age = 22;
+    cout << t1.name << endl;
+    cout << t1.age << endl;
+    cout << t1.s1.name << endl;
+    cout << t1.s1.age << endl;
+```
+
+### 结构体为函数参数和返回值
+
+作为函数的参数有两种传入方式：
+
+- 值传入(作为形参, 不会修改原先的值)
+- 地址传入(会修改原先的值)(并且可以节省内存，因为只传地址，不会复制)
+
+```
+struct student
+{
+    string name;
+    int age;
+    float score;
+};
+
+void PrintStudent1 (student s)
+{
+    cout << s.name << " " << s.age << " " << s.score << endl;
+    s.age = 20;
+}
+void PrintStudent2 (student *s)
+{
+    cout << s->name << " " << s->age << " " << s->score << endl;
+    s->age = 20;
+}
+
+void Struct_function()
+{
+    student s1 = { "miki", 32, 76 };
+
+
+    PrintStudent1(s1); // 方式1 值传入
+    cout << s1.name << " " << s1.age << " " << s1.score << endl;
+    PrintStudent2(&s1); // 方式2 地址传入
+    cout << s1.name << " " << s1.age << " " << s1.score << endl;
+}
+
+int main()
+{
+    Struct_functon();
+}
+```
+
+### 结构体中的const
+
+- 假如const后就不能修改里面的值
+
+``` 
+void PrintStudent1 (const student s)
+{
+    cout << s.name << " " << s.age << " " << s.score << endl;
+    s.age = 20;
+}
+void PrintStudent2 (const student *s)
+{
+    cout << s->name << " " << s->age << " " << s->score << endl;
+    s->age = 20;
+}
+```
+
+## 模板(TODO)
+
 
 
 [【↥ back to top】](#目录)
