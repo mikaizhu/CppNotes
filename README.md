@@ -92,6 +92,14 @@
       * [结构体嵌套结构体](#结构体嵌套结构体)
       * [结构体为函数参数和返回值](#结构体为函数参数和返回值)
       * [结构体中的const](#结构体中的const)
+* [day19](#day19)
+   * [内存分区](#内存分区)
+   * [引用的补充](#引用的补充)
+      * [cpp中变量和python中变量与内存关系](#cpp中变量和python中变量与内存关系)
+      * [引用做函数的参数](#引用做函数的参数)
+      * [引用作函数的返回值](#引用作函数的返回值)
+      * [引用的本质](#引用的本质)
+      * [常量引用](#常量引用)
    * [模板(TODO)](#模板todo)
 * [day??(TODO)](#daytodo)
    * [虚函数](#虚函数)
@@ -99,7 +107,7 @@
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月29日 星期日 16时51分31秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月30日 星期一 12时10分37秒 CST -->
 
 <!--te-->
 
@@ -166,6 +174,13 @@ sudo apt install gcc, g++
 2. 编译cpp文件`g++ HelloWorld.cpp`, 生成可执行文件`a.out` 
 3. 运行可执行文件`./a.out` 
 
+**cpp 程序运行分为以下几个步骤** :
+
+- 预处理：宏定义展开、头文件展开、条件编译，这里并不会检查语法
+- 编译：检查语法，将预处理后文件编译生成汇编文件
+- 汇编：将汇编文件生成目标文件（二进制文件）
+- 链接：将目标文件链接为可执行程序
+
 ## CMake
 
 make工具分成好多种，不同平台下如Windows，Linux的make语法是不一样的，为了解决跨
@@ -178,8 +193,6 @@ cMake 的流程是：
 4. 运行可执行文件
 
 [参考视频](bilibili.com/video/BV16V411k7eF?from=search&seid=16111676939071467556) 
-
-
 
 [【↥ back to top】](#目录)
 # day1 HelloWorld
@@ -2275,9 +2288,213 @@ void PrintStudent2 (const student *s)
 }
 ```
 
+[【↥ back to top】](#目录)
+# day19
+
+## 内存分区
+
+程序在运行的时候，都是要先加载到内存中，然后才能被运行的，所以这就涉及到内存的
+分区。
+
+程序在加载到内存之前，代码区和全局区（data和bss）的大小就是固定的，程序运行期间不能改变，然后，运行可执行程序，操作系统把物理硬盘程序load（加载）到内存，除了根据可执行程序的信息分出代码区（text）、数据区（data）和未初始化数据区（bss）之外，还额外增加了栈区和堆区。
+
+内存因此在程序运行中，主要分成下面几个部分：
+
+- 代码区
+- 静态区
+- 堆
+- 栈
+
+**代码区** : 存放程序的代码，代码只是可读的, 代码区的代码是共享的，即使打开了
+多个程序，内存不会复制好几份这个程序的二进制代码在内存中，这些程序共用一个内存
+
+**静态区(全局区)** : 静态区的变量，要在程序执行完后才会释放，cpp中存放在静态区的变量有
+如下(想下哪些变量，只有在程序运行完后才会释放就可以)
+
+- 全局变量
+- 静态变量
+- 常量(const修饰的全局变量， 字符串常量)
+
+不在全局区中的有：
+
+- 局部变量
+- const修饰的局部变量
+
+```
+int glob_a = 10;
+int glob_b = 10;
+const int c_glob_a = 10;
+const int c_glob_b = 10;
+static int s_glob_a = 10;
+
+
+int main()
+{
+    int local_a = 10;
+    int local_b = 10;
+    
+    const int c_local_a = 10;
+    const int c_local_b = 10;
+
+    static int s_local_a = 10;
+
+    cout << "glob_a: " << (long)&glob_a << endl;
+    cout << "glob_b: " << (long)&glob_b << endl;
+    cout << "c_glob_a: " << (long)&c_glob_a << endl;
+    cout << "c_glob_b: " << (long)&c_glob_b << endl;
+    cout << "string const: " << (long)&"hello world" << endl;
+
+    cout << "local_a: " << (long)&local_a << endl;
+    cout << "local_b: " << (long)&local_b << endl;
+    cout << "c_local_a: " << (long)&c_local_a << endl;
+    cout << "c_local_b: " << (long)&c_local_b << endl;
+
+    cout << "s_local_a: " << (long)&s_local_a << endl;
+    cout << "s_glob_a: " << (long)&s_glob_a << endl;
+}
+
+glob_a: 4534468800
+glob_b: 4534468804
+c_glob_a: 4534464348
+c_glob_b: 4534464352
+string const: 4534464267
+local_a: 140732681266764
+local_b: 140732681266760
+c_local_a: 140732681266756
+c_local_b: 140732681266752
+s_local_a: 4534468808
+s_glob_a: 4534468812
+```
+
+从上面可以看出：static定义的不管是局部还是全局，变量周期都是整个程序，const会
+根据变量是局部还是全局，只不过是内部的值不能被修改而已
+
+**栈** : 函数中的变量就是存放在栈区域的，当函数调用完后，栈地址中的数据就会释
+放，所以不要在函数中返回局部变量的地址
+
+**堆* : 堆区域的数据是我们来管理他们的生命周期，使用new关键字来创建堆数据
+
+```
+// new 关键字的基本语法
+
+// 创建类
+
+struct vector()
+{float x, y, z;};
+
+vector Vec; // 堆上创建向量
+
+int *p = new int(10); // new关键字返回的是一个地址，所以要指针来接收这个地址
+int *arr = new int[10]; // 使用new关键字创建一个数组
+vector* Vec = new vector; // 堆上创建向量
+
+
+delete p; // 释放一个整型数据
+delete[] arr; // 释放一个堆上的整型数组
+delete vector;
+```
+
+## 引用的补充
+
+cpp中的引用就是给该内存地址取另一个别名
+
+### cpp中变量和python中变量与内存关系
+
+在cpp中，可以直接通过变量，修改内存中的地址，但是在python中，并不可以直接通过
+变量修改地址.
+
+```
+    int a = 10;
+    int &b = a;
+
+    cout << "a: " << (long)&a << endl;
+    cout << "b: " << (long)&b << endl;
+
+    b = 20;
+    cout << "a: " << (long)&a << endl;
+    cout << "b: " << (long)&b << endl;
+```
+
+下面两个a变量的地址不一样.
+
+```
+a = 10
+print(id(a))
+a = 20
+print(id(a))
+```
+
+### 引用做函数的参数
+
+我们知道函数中的形参修改，并不会影响到实参的值，如果要影响的话，可以通过将实参
+的地址传入到函数中。现在我们可以通过引用来修改.
+
+```
+void swap1(int a, int b)
+{
+  temp = a;
+  a = b;
+  b = temp;
+}
+
+void swap2(int &a, int &b)
+{
+  temp = a;
+  a = b;
+  b = temp;
+}
+
+int a = 10;
+int b = 20;
+swap2(a, b); // 引用修改， 就相对于普通的定义中多了引用
+swap1(a, b);
+```
+
+### 引用作函数的返回值
+
+不能将局部变量作为引用返回，因为内存会释放
+
+```
+int& test() // 定义函数，返回引用
+{
+    static int a;
+    return a;
+}
+
+int& a = test(); // 接收引用
+
+test() = 100; // 引用的函数，可以作为左值
+```
+
+### 引用的本质
+
+引用本质上就是指针常量，编译器在遇到引用这行代码，就会自动转换成指针常量
+
+```
+int a = 10;
+int& b = a;
+
+// 相当于下面, const 修饰指针，说明地址不能改变，但值可以改变
+
+int* const b = a;
+```
+
+### 常量引用
+
+前面我们通过引用，可以修改实参的值，但有时候我们不想修改，为了避免误操作，使用
+常量引用.
+
+```
+void Print(const int& a)
+{
+  a = 100;
+  cout << a << endl;
+}
+
+int a = 10;
+Print(a); // 外部a的值不会修改
+```
 ## 模板(TODO)
-
-
 
 [【↥ back to top】](#目录)
 # day??(TODO)
