@@ -100,14 +100,19 @@
       * [引用作函数的返回值](#引用作函数的返回值)
       * [引用的本质](#引用的本质)
       * [常量引用](#常量引用)
-   * [模板(TODO)](#模板todo)
+* [day20](#day20)
+   * [函数的声明(补充)](#函数的声明补充)
+   * [函数占位参数](#函数占位参数)
+   * [函数重载](#函数重载)
+   * [类和对象](#类和对象)
+* [模板(TODO)](#模板todo)
 * [day??(TODO)](#daytodo)
    * [虚函数](#虚函数)
    * [纯虚函数](#纯虚函数)
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月30日 星期一 12时10分37秒 CST -->
+<!-- Added by: zwl, at: 2021年 8月31日 星期二 21时36分32秒 CST -->
 
 <!--te-->
 
@@ -2494,7 +2499,122 @@ void Print(const int& a)
 int a = 10;
 Print(a); // 外部a的值不会修改
 ```
-## 模板(TODO)
+
+
+[【↥ back to top】](#目录)
+# day20
+
+## 函数的声明(补充)
+
+像下面函数的声明是不行的：(不能声明了函数后设置默认参数，然后又在定义中修默认
+的参数)
+
+```
+int sum(int a = 10, int b = 20);
+
+int sum(int a = 10, int b = 20)
+{
+    return a + b;
+}
+```
+
+## 函数占位参数
+
+- 在定义函数的时候，只要设置数据类型，就可以起到占位的作用
+
+```
+void func(int a, int)
+{
+;
+}
+
+int main()
+{
+func(10, 10);
+}
+```
+
+## 函数重载
+
+函数重载指的是，当程序中的函数满足一定条件，函数的名字是可以重复的。条件如下：
+
+1. 同一作用域
+2. 函数名称相同
+3. 函数的参数类型不同，个数不同，顺序不同
+
+```
+void sum(int a = 20, int b = 10)
+{
+    cout << "int a = 10, int b = 20" << endl;
+}
+
+void sum(double a, int b)
+{
+    cout << "int a = 10, int b = 20" << endl;
+}
+/* 
+void sum(int b = 10, int a = 20)
+{
+    cout << "int b = 10, int a = 20" << endl;
+}
+*/
+void sum()
+{
+    cout <<  " " << endl;
+}
+
+void sum(int a)
+{
+    cout << "int a" << endl;
+}
+
+int main()
+{
+    //cout << sum(10, 10) << endl;
+    sum(10, 10);
+}
+```
+
+下面几种情况依旧会报错：
+
+```
+void sum(int a = 20, int b = 10)
+{
+    cout << "int a = 10, int b = 20" << endl;
+}
+
+void sum()
+{
+    cout <<  " " << endl;
+}
+// 调用的时候，带参数不会报错，不带参数会报错
+sum(10, 10);
+```
+
+只是调换顺序依旧会报错：
+
+```
+void sum(int a = 20, int b = 10)
+{
+    cout << "int a = 10, int b = 20" << endl;
+}
+
+
+void sum(int b = 10, int a = 20)
+{
+    cout << "int b = 10, int a = 20" << endl;
+}
+
+```
+
+## 类和对象
+
+主要包括以下内容：封装 继承 多态
+
+
+
+[【↥ back to top】](#目录)
+# 模板(TODO)
 
 [【↥ back to top】](#目录)
 # day??(TODO)
