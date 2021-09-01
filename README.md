@@ -105,6 +105,8 @@
    * [函数占位参数](#函数占位参数)
    * [函数重载](#函数重载)
    * [类和对象](#类和对象)
+      * [访问权限](#访问权限)
+      * [练习](#练习)
 * [模板(TODO)](#模板todo)
 * [day??(TODO)](#daytodo)
    * [虚函数](#虚函数)
@@ -112,7 +114,7 @@
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 8月31日 星期二 21时36分32秒 CST -->
+<!-- Added by: zwl, at: 2021年 9月 1日 星期三 15时14分36秒 CST -->
 
 <!--te-->
 
@@ -2612,6 +2614,160 @@ void sum(int b = 10, int a = 20)
 主要包括以下内容：封装 继承 多态
 
 
+### 访问权限
+
+- public: 类内可以访问，类外也可以访问
+- protected: 类内可以访问，类外不可以访问，子类可以访问
+- private: 类内可以访问，类外不可以访问，子类不可以访问
+
+当我们设置类中的某些属性为私有时候，依旧可以自定义函数接口，将这些属性设置为以
+下形式：
+
+- 可读
+- 可写
+- 可读可写
+
+```
+class People{
+  private:
+    string name;
+    int age = 32;
+  protected:
+    string password = "1234";
+  public:
+    // name 可读可写操作
+    string getName(){
+        return name;
+    }
+    void setName(string _name){
+        name = _name;
+    }
+
+    // age 只可读操作
+    int getAge(){
+        return age;
+    }
+
+    // paw 只可写操作
+    void setPaw(string paw){
+        password = paw;
+        cout << endl;
+        cout << "set paw success." << endl;
+    }
+
+};
+```
+
+### 练习
+
+- [(构建一个立方体类)参考代码](./code/day20/demo2.cpp) 
+
+可以从中学习到的点有：
+
+1. 成员方法判断两个立方体是不是一样。只要传入一个参数即可
+
+```
+    bool isSame(Cube &c){
+        if (H == c.getH() && W == c.getW() && L == c.getL())
+            return true;
+        return false;
+    }
+```
+
+**为了避免形式参数进行复制，通常使用引用作为函数的参数** 
+
+2. 全局方法判断两个立方体是不是一样的
+
+```
+bool isSame(Cube &c1, Cube &c2){
+    if (c1.getL() == c2.getL() && c1.getH() == c2.getH() && c1.getW() == c2.getW())
+        return true;
+    return false;
+}
+```
+
+- [(构建一个圆类, 判断点和圆的关系)参考代码](./code/day20/demo3.cpp) 
+
+代码中有两个类，一个是圆类，另一个是点类，在实际的项目中，我们不会将他们写在同
+一个文件中，而是单独地分开来。
+
+- 代码声明写在头文件中
+- 代码实现写在源文件中
+
+将demo3的代码进行修改，得到下面的格式.
+
+- circle.h 文件中只进行声明circle类
+- circle.cpp 文件中，是对h文件中的声明的实现
+- point.h 文件中只进行声明point类
+- point.cpp 中，是对h文件中的声明的实现
+- demo4.cpp 是代码和合集，main函数的入口
+
+demo4.cpp 内容如下，只要修改包括这两个声明文件即可:[code](./code/day20/demo4.cpp) 
+
+```
+#include "point.h"
+#include "circle.h"
+
+int main()
+{
+    Circle c1;
+    c1.setCenter(0, 0);
+    c1.setR(1);
+
+    Point p(1, 0);
+
+    c1.isInCircle(p);
+}
+```
+
+先看point.h文件的内容:[code](./code/day20/point.h) , 注意以下几点
+
+- 构造函数的声明，如果有初始化变量，则只在声明中实现初始化
+- 构造函数必须放置在public中
+
+```
+#pragma once
+#include <iostream>
+
+class Point{
+  private:
+    float X, Y;
+  public:
+    Point (float x = 0, float y = 0);
+    float getX();
+    float getY();
+};
+```
+
+再看point.cpp中的内容：[code](./code/day20/point.cpp) , 注意以下几点
+
+- 构造函数的声明方法如下，不用再进行初始化了, 设置float x = 0
+- 必须要添加作用域，注意是float Point::getX() 这个顺序
+
+```
+#include "point.h"
+
+using namespace std;
+
+
+Point::Point (float x, float y)
+{
+    X = x;
+    Y = y;
+}
+
+float Point::getX()
+{
+    return X;
+}
+
+float Point::getY()
+{
+    return Y;
+}
+```
+
+**如果有多个类, 则只要将这个类的声明包含进来即可使用，然后cpp会自动寻找link.** 
 
 [【↥ back to top】](#目录)
 # 模板(TODO)
