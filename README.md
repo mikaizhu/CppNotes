@@ -9,6 +9,8 @@
    * [Mac](#mac)
    * [运行逻辑](#运行逻辑)
    * [CMake](#cmake)
+* [基础知识讲解](#基础知识讲解)
+   * [计算机内存](#计算机内存)
 * [day1 HelloWorld](#day1-helloworld)
 * [day2 Cmake](#day2-cmake)
 * [day3 Link and Compile](#day3-link-and-compile)
@@ -46,6 +48,7 @@
 * [day12](#day12)
    * [构造函数 constructor](#构造函数-constructor)
    * [destructor 析构函数](#destructor-析构函数)
+   * [构造函数的声明](#构造函数的声明)
    * [继承](#继承)
 * [day13](#day13)
    * [数组](#数组)
@@ -107,6 +110,7 @@
    * [类和对象](#类和对象)
       * [访问权限](#访问权限)
       * [练习](#练习)
+   * [构造函数与析构函数的补充(构造函数的几种写法)](#构造函数与析构函数的补充构造函数的几种写法)
 * [模板(TODO)](#模板todo)
 * [day??(TODO)](#daytodo)
    * [虚函数](#虚函数)
@@ -114,7 +118,7 @@
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 9月 1日 星期三 15时14分36秒 CST -->
+<!-- Added by: zwl, at: 2021年 9月 2日 星期四 22时18分47秒 CST -->
 
 <!--te-->
 
@@ -200,6 +204,57 @@ cMake 的流程是：
 4. 运行可执行文件
 
 [参考视频](bilibili.com/video/BV16V411k7eF?from=search&seid=16111676939071467556) 
+
+[【↥ back to top】](#目录)
+# 基础知识讲解
+
+## 计算机内存
+
+- [参考视频](https://www.youtube.com/watch?v=EmMI-1FH4XQ&t=193s) 
+
+因为电脑如果直接使用cpu与硬盘进行数据通信，由于硬盘的读写相比于cpu速度很慢，所以需要通
+过内存来进行读写。
+
+- 计算机内存又叫做RAM(random access memory), 内存从硬盘中读取程序数据, 然后与cpu
+进行交互.
+- 内存一般用来存放二进制指令，与软件的数据, 断电就消失
+
+- 内存中最小单位是比特(bit)每个bit只能存储0或1，8个bits组成一个字节(byte), 为
+  了方便计算，内存会给每个字节分配一个地址，而不是每个比特一个地址，所以可以看
+  成内存的最小单位是字节, 每个内存的地址称作内存地址
+
+- 内存地址是用16进制表示，查看下面内存大小
+
+```
+# 假设内存地址从
+0x00000000
+0xFFFFFFFF
+
+分析：
+
+因为内存中最小的单位是字节，每个字节8比特，所以从0x00000000到0x0000000F, 经过
+了16个字节，所以上面地址总字节大小为16^8字节，也就是2^32次方字节.
+```
+
+- 程序是如何表示内存的呢？
+
+```
+内存地址  字节
+1000:10F0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+1000:1100 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+1000:1110 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+
+真实情况中，内存中是以16个字节排成一排，比如从10F0到1100就是16个字节，从内存地
+址开始往右，可以得到具体每个内存地址，如第一排就是从10F0到10FF一共16个字节
+
+00表示1个字节，因为1个字节是8比特，所以第一个0可以表示4位二进制，2^4刚好是16.
+所以一个字节可以存放2^8次方大小的数
+```
+
+- 内存大小除了使用byte，还可以使用KB，MB, GB ，其中1KB=1024bytes， 1MB=1024KB
+  ， 1GB = 1024MB
+
+
 
 [【↥ back to top】](#目录)
 # day1 HelloWorld
@@ -1186,6 +1241,8 @@ name variable_name = A or B or C // 相当于int var_name
 
 ## 构造函数 constructor
 
+参考：https://www.runoob.com/cplusplus/cpp-constructor-destructor.html
+
 就像python类中的init一样，我们需要类在实例化的同时，会自动执行一些函数，这个在
 cpp中叫做构造函数.
 
@@ -1273,10 +1330,16 @@ int main()
 }
 ```
 
-- 观察上面函数，可以发现我们首先调用了Function函数，当这个函数调用完后，内存会
+- 观察上面函数，可以发现我们首先调用了Function函数, 因为function函数是在栈上的，当这个函数调用完后，内存会
   释放掉
 
 - [参考代码](./code/day12/demo3.cpp) 
+
+## 构造函数的声明
+
+参考：https://www.runoob.com/cplusplus/cpp-constructor-destructor.html
+
+案例：[code](./code/day20/demo4.cpp) 
 
 ## 继承 
 
@@ -1303,7 +1366,6 @@ class Player : public Entity
         cout << Name << endl;
     }
 };
-
 ```
 
 
@@ -2768,6 +2830,70 @@ float Point::getY()
 ```
 
 **如果有多个类, 则只要将这个类的声明包含进来即可使用，然后cpp会自动寻找link.** 
+
+## 构造函数与析构函数的补充(构造函数的几种写法)
+
+构造函数的几种类型:
+
+```
+1. 普通的构造函数
+
+2. 带参数的构造函数
+
+3. 拷贝构造函数
+
+class People
+{
+  private:
+    int a;
+
+  public:
+    People()
+    {
+        cout << "调用无参数构造函数" << endl;
+    }
+
+    People(int b)
+    {
+       a = b; 
+       cout << "调用有参数的构造函数" << endl;
+    }
+
+    People(const People &b)
+    {
+        a = b.a; // b 是另一个类的引用
+        cout << "调用复制构造函数" << endl;
+    }
+};
+
+int main()
+{
+    People p1;
+    People p2(2);
+    People p3(p2);
+}
+```
+
+当然，调用构造函数也有以下几种：
+
+```
+1. 括号法调用
+    People p2(2);
+    People p3(p2);
+
+说明下为什么不能：People p1(); 加括号 这样cpp编译器会认为这是一个声明, 而不会
+创建一个类。
+
+2. 显式法
+Pepole p1;
+People p2 = People(2);
+People p3 = People(p2);
+
+
+3. 隐式法
+People p2 = 2; // 相当于显式法
+People p3 = p2; // 也会自动转换为显式法
+```
 
 [【↥ back to top】](#目录)
 # 模板(TODO)
