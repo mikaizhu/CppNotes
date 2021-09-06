@@ -115,6 +115,10 @@
    * [复制构造函数的调用时机](#复制构造函数的调用时机)
    * [构造函数的调用规则](#构造函数的调用规则)
    * [深拷贝与浅拷贝](#深拷贝与浅拷贝)
+   * [初始化列表](#初始化列表)
+   * [类对象的调用顺序](#类对象的调用顺序)
+   * [静态成员函数(static)](#静态成员函数static)
+   * [c++对象模型和this指针](#c对象模型和this指针)
 * [模板(TODO)](#模板todo)
 * [day??(TODO)](#daytodo)
    * [虚函数](#虚函数)
@@ -122,7 +126,7 @@
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 9月 5日 星期日 22时39分15秒 CST -->
+<!-- Added by: zwl, at: 2021年 9月 6日 星期一 22时10分34秒 CST -->
 
 <!--te-->
 
@@ -2949,19 +2953,19 @@ People(const People &b)
 假如我们自己手动实现了无参数的构造函数和有参数的构造函数，在代码中都可以调用
 ```
 Person()
-    {
-        cout << "普通构造函数正在调用" << endl;
-    }
+{
+    cout << "普通构造函数正在调用" << endl;
+}
 
 Person(string name_)
-    {
-        cout << "构造函数正在调用..." << endl;
-        name = name_;
-    }
+{
+    cout << "构造函数正在调用..." << endl;
+    name = name_;
+}
 
 
-    Person p; // 无参数调用
-    Person p1("miki");
+Person p; // 无参数调用
+Person p1("miki");
 ```
 
 当我们把无参数的注释掉后，会发现不能通过`Person p`调用系统默认的无参数构造函数
@@ -2970,8 +2974,8 @@ Person(string name_)
 面两个代码都不能使用：
 
 ```
-    Person p; // 无参数调用
-    Person p1("miki");
+Person p; // 无参数调用
+Person p1("miki");
 ```
 
 ## 深拷贝与浅拷贝
@@ -2985,10 +2989,157 @@ Person(string name_)
 总的来说就是，我们需要利用复制构造函数，来自己实现深拷贝，系统默认使用的是浅拷
 贝，深拷贝在堆上创建的新空间，需要利用析构函数来释放。
 
+首先要查看什么时候会出现浅拷贝，浅拷贝会有什么危害, 查看代码：
+[code](./code/day21/demo2.cpp) 
+
+```
+1. 首先创建一个类，类中有个堆空间上的变量。
+2. 在类中实现析构函数，析构函数会释放堆的内存
+3. 创建两个类，第一个类普通创建，第二个类是利用复制构造函数创建
+4. 当析构函数被调用的时候，程序就会报错，原因是堆空间被释放了两次
+
+Person p1("miki", 160);
+cout << p1.name << " " "的身高为：" << *p1.height << endl;
+Person p2(p1);
+cout << p2.name << " " "的身高为：" << *p2.height << endl;
+```
+当函数被调用的时候，代码是栈，即先入后出，因此p2会先释放，然后再释放p1.
+
+出现上面问题的原因是：如果不自己创建一个复制构造函数，那么复制的时候，是调用的
+默认的复制构造函数
+
+```
+Person p2(p1); // 调用默认的复制构造函数
+
+// 相当于使用下面代码，即浅拷贝, 问题主要出现在指针的拷贝，因为指针是记录地址
+，拷贝后，p2height也记录的是同一个堆上的地址，即p1.height and p2.height 指向的
+都是同一个堆地址，当要释放height指针的时候，一个地址被释放了两次, 导致出错
+name = p1.name;
+height = p1.height
 ```
 
-[【↥ back to top】](#目录)
-TODO
+正确的修改方法如下：手动实现新的复制构造函数, 在里面实现手动创建一个堆区域复制
+
+```
+Person(const Person & p)
+{
+cout << "正在调用复制构造函数" << endl;
+height = new int(*p.height);
+}
+```
+当实现了在堆上复制时，两个height指针指向的堆区域不再相同，因为堆先会将160数据
+从一个地址复制进另一个地址, 而浅拷贝不会
+
+## 初始化列表
+
+正常情况下，当我们创建了一个类，给类中的属性赋值的方法有很多，通常为：
+
+```
+class Person
+{
+public:
+  int A;
+  string B;
+  double C;
+
+  Person(int a, string b, double c)
+  {
+    A = a;
+    B = b;
+    C = c;
+  }
+};
+```
+
+现在有另一种方法更为简单：
+
+```
+class Person
+{
+public:
+  int A;
+  string B;
+  double C;
+
+  Person(int a, string b, double c):A(a), B(b) C(c)
+  {
+    这里面写其他代码，使代码更简洁
+  }
+};
+```
+## 类对象的调用顺序
+
+假如现在有两个类A B，其中A是B的对象成员，那么是A的构造函数先调用，还是B的构造
+函数先调用呢？
+
+- [参考代码](./code/day21/demo3.cpp) 
+
+```
+class A
+{
+  public:
+   A()
+};
+class B
+{
+  public:
+    A a; // 在B类中调用A
+    B()
+};
+
+int main()
+{
+    B b;
+}
+```
+
+总结：B类中虽然有A类，但是当构造B类的时候，先会对A类进行构造, 然后再构造出B
+
+## 静态成员函数(static)
+
+- [参考代码](./code/demo4.cpp) 
+
+静态成员函数只能访问静态成员变量，而不能访问其他的变量：
+
+```
+class Person
+{
+  public:
+    string nameA;
+    static string nameB;
+  public:
+    static void func(string name)
+    {
+        //nameA = name; 
+        nameB = name; // 静态成员函数只能访问静态成员变量
+    }
+};
+```
+
+注意，调用类中成员方法有两种方式：
+
+```
+方式1:
+Person::func("miki");
+
+方式2:
+p1.func("miki");
+```
+
+## c++对象模型和this指针
+
+- 关于c++对象模型，结论如下：
+
+类的成员变量和成员函数是分开存储的，只有非静态对象属于类对象上，其他的都不属于
+类对象上.
+
+主要是通过sizeof可以查看对象所占的内存大小，测试代码：[code](./code/day21/demo5.cpp) 
+
+- this指针的用法:
+
+```
+1. 方便区分变量
+
 ```
 
 [【↥ back to top】](#目录)
