@@ -119,6 +119,10 @@
    * [类对象的调用顺序](#类对象的调用顺序)
    * [静态成员函数(static)](#静态成员函数static)
    * [c++对象模型和this指针](#c对象模型和this指针)
+* [day22](#day22)
+   * [空指针访问成员函数](#空指针访问成员函数)
+   * [const修饰成员函数](#const修饰成员函数)
+   * [友元(TODO)](#友元todo)
 * [模板(TODO)](#模板todo)
 * [day??(TODO)](#daytodo)
    * [虚函数](#虚函数)
@@ -126,7 +130,7 @@
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 9月 6日 星期一 22时10分34秒 CST -->
+<!-- Added by: zwl, at: 2021年 9月 7日 星期二 21时16分49秒 CST -->
 
 <!--te-->
 
@@ -3133,14 +3137,165 @@ p1.func("miki");
 类的成员变量和成员函数是分开存储的，只有非静态对象属于类对象上，其他的都不属于
 类对象上.
 
+当我们实例化多个对象的时候，只有成员变量是独立的，成员函数是共用的，所以我们无
+法确定是哪个对象调用的类内部的函数.
+
 主要是通过sizeof可以查看对象所占的内存大小，测试代码：[code](./code/day21/demo5.cpp) 
 
-- this指针的用法:
+为了分清楚函数是哪个对象调用的，所以就有了this指针，如果实例化了p1，p2，p3，哪
+个调用了这个函数，this指针就会指向p1，p2，p3
+
+- this指针的用法, this指向的是这个对象的指针，`*this`就是这个对象的本体:
+
+- this 指针可以不用我们定义，可以直接使用, 函数内部就含有这个
 
 ```
-1. 方便区分变量
+1. 方便区分变量, 假设有下面代码，其中类中有getAge变量，外部也有个age变量，那么
+   函数内部和外部哪些age是一样的呢？
+
+class Person
+{
+  public:
+    int age;
+    string name;
+  public:
+    void getAge(int age)
+    {
+        age = age; // 左边的age会被认为是形式参数，不是外部的age，所以会报错
+    }
+};
+
+// 修改成下面
+  public:
+    void getAge(int age)
+    {
+        this->age = age; 
+    }
+};
+
+2. 使用this编程可以实现链式编程的代码，就像python中的.move().move()
+
+public:
+  Person& move(int step)
+  {
+      move_step += step;
+      //cout << "已经走了: " << move_step << endl;
+      // *this 返回的是对象的本体，所以要用Person& move 定义返回类型
+      return *this; // 相当于return self
+  }
+```
+
+其实我们之前也见过这种类型的链式方法，cout and cin
+
+这里有个问题，如果我将`&`符号换成`*`号, 那么结果会变成什么样子呢？
 
 ```
+将代码：
+    Person& move(int step)
+    {
+        move_step += step;
+        return *this; // 相当于return self
+    }
+修改成：
+    Person move(int step)
+    {
+        move_step += step;
+        return *this; // 相当于return self
+    }
+
+当我调用：
+    Person p1;
+    p1.move(2).move(2);
+    cout << p1.move_step << endl;
+```
+
+会输出什么结果呢？
+
+> 结果会发现p1还是只行走了2步，步数并没有累加, 主要原因是，如果只使用Person定
+> 义函数的话, 调用的是拷贝构造函数返回一个新对象p'，如果加引用，依旧是p'，只不
+> 过p'还是p1的引用
+
+参考之前的复制构造调用的三个情况：
+
+```
+1. 使用复制构造创建一个新的类
+
+2. 作为函数传入参数的时候
+
+3. 作为函数返回的参数的时候
+```
+
+`return *this;`  相当于作为函数返回的参数, 于是会调用复制构造函数，复制构造函
+数会复制一个新的类，并且地址和原来的不同，如果加上引用，会发现两个地址是一样的
+
+- [参考代码](./code/day21/demo6.cpp) 
+
+
+[【↥ back to top】](#目录)
+# day22
+
+## 空指针访问成员函数
+
+假设现在有个Person类，里面有个age属性, 如果现在创建一个Person类的空指针, 如何访问空指针的内部函数呢？
+
+```
+Person* p1=NULL;
+p1->showAge2(); // 这个可以正常运行
+p1->showAge1(); // 这里会报错
+```
+
+可以发现age1函数中，调用了age，实际上真正的代码是
+
+```
+cout << this->age << endl;
+```
+
+this 指向的是当前对象，我们用person创建了一个新的指针，但这个指针为空，this没
+有指向任何东西，所以也为空，空指针没有任何属性，所以报错
+
+## const修饰成员函数
+
+这部分包括两个内容：
+
+1. 常函数
+2. 常对象
+
+常函数：
+
+```
+class Person
+{
+  public:
+    int ageA;
+    mutable int ageB;
+
+    void changeAge() const // 常函数，在后面加个const
+    {
+        this->ageB = 100;
+    }
+};
+```
+
+> 注意几点：
+>
+> - 常函数中，变量是不能修改的，比如我们想修改ageB的值，实际上前面是有个this指针
+> - 如果非要在常函数中修改内部的值，则要在变量声明前面加个mutable
+
+常对象：
+
+```
+const Person p2; // 前面加个const就是常对象
+p2.changeAge2();
+```
+
+> 注意几点：
+>
+>- 如果是常对象，那么常对象只能调用常函数，不能调用普通的函数
+>- 因为普通函数可以修改任意值，常函数不能修改属性，所以可能冲突，最好的办法就是
+>  禁止常对象调用普通函数
+
+## 友元(TODO)
+
 
 [【↥ back to top】](#目录)
 # 模板(TODO)
