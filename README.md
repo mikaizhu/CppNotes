@@ -11,6 +11,7 @@
    * [CMake](#cmake)
 * [基础知识讲解](#基础知识讲解)
    * [计算机内存](#计算机内存)
+   * [堆和栈的知识讲解(TODO)](#堆和栈的知识讲解todo)
 * [day1 HelloWorld](#day1-helloworld)
 * [day2 Cmake](#day2-cmake)
 * [day3 Link and Compile](#day3-link-and-compile)
@@ -36,6 +37,7 @@
    * [常量指针和指针常量](#常量指针和指针常量)
 * [day9 类](#day9-类)
    * [类的定义](#类的定义)
+   * [类的声明(包括前置声明)](#类的声明包括前置声明)
    * [class &amp; struct 的区别](#class--struct-的区别)
    * [用类创建一个基本日志功能](#用类创建一个基本日志功能)
 * [day10 static extern](#day10-static-extern)
@@ -122,7 +124,7 @@
 * [day22](#day22)
    * [空指针访问成员函数](#空指针访问成员函数)
    * [const修饰成员函数](#const修饰成员函数)
-   * [友元(TODO)](#友元todo)
+   * [友元(friend)](#友元friend)
 * [模板(TODO)](#模板todo)
 * [day??(TODO)](#daytodo)
    * [虚函数](#虚函数)
@@ -130,7 +132,7 @@
    * [可见性](#可见性)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 9月 7日 星期二 21时16分49秒 CST -->
+<!-- Added by: zwl, at: 2021年 9月 8日 星期三 15时42分46秒 CST -->
 
 <!--te-->
 
@@ -265,6 +267,9 @@ cMake 的流程是：
 
 - 内存大小除了使用byte，还可以使用KB，MB, GB ，其中1KB=1024bytes， 1MB=1024KB
   ， 1GB = 1024MB
+
+## 堆和栈的知识讲解(TODO)
+
 
 
 
@@ -1022,6 +1027,97 @@ void move(Player player1) // 这里必须传入实例对象进去
 
 则相当于创建了一个新的类对象，相当于局部的，没有在之前的上面修改, 如果不是在类
 里面写方法, 要使用引用
+
+## 类的声明(包括前置声明)
+
+通常我们是在头文件中进行声明操作，类的声明方式如下, 假如现在有个类：
+
+```
+class Person
+{
+public:
+  int age;
+  string name;
+public:
+Person(int age=0, string name="miki")
+{
+  this->age = age;
+  this->name = name;
+}
+
+void showInfo()
+{
+  cout << age << endl;
+  cout << name << endl;
+}
+};
+```
+
+这个类中包括了构造函数初始化，以及属性和方法三种结构, 则声明如下：
+
+```
+class Person
+{
+  public:
+    int age;
+    string name;
+  public:
+    Person(int age=0, string name="miki");
+    void showInfo();
+  }
+```
+
+前置声明：当我们有两个类的时候，两个类需要互相调用的时候
+
+通常写法如下：
+```
+class A
+{
+
+};
+
+class B
+{
+  public:
+  A a; // 如果想在B类中通过A类创建一个对象，那么class A必须先定义
+};
+```
+
+前置声明只允许类创建一个声明或者指针，不能创建一个对象, 下面写法是错误的
+
+```
+class A;
+class B
+{
+  public:
+  A a; // 如果想在B类中通过A类创建一个对象，那么class A必须先定义
+};
+
+class A
+{
+
+};
+```
+
+正确写法应该如下：
+
+```
+class A;
+class B
+{
+  public:
+  A *a; 
+};
+
+class A
+{
+
+};
+
+```
+
+- [前置声明代码请参考demo6](./code/day22/demo6.cpp) 
+
 
 ## class & struct 的区别
 
@@ -3068,9 +3164,30 @@ public:
   Person(int a, string b, double c):A(a), B(b) C(c)
   {
     这里面写其他代码，使代码更简洁
-  }
+  } // 这里可以加分号，不加也行
 };
 ```
+说明：初始化列表可以在后面加分号也可以不加
+
+
+还有一种方法是在类的外部初始化：注意，这种方式要先在类中声明构造函数
+
+```
+class Person
+{
+  public:
+  Person();
+};
+
+
+Person::Person()
+{
+    this->A = 1;
+    this->B = "miki";
+    this->C = 0.2;
+}
+```
+
 ## 类对象的调用顺序
 
 假如现在有两个类A B，其中A是B的对象成员，那么是A的构造函数先调用，还是B的构造
@@ -3294,8 +3411,105 @@ p2.changeAge2();
 >- 因为普通函数可以修改任意值，常函数不能修改属性，所以可能冲突，最好的办法就是
 >  禁止常对象调用普通函数
 
-## 友元(TODO)
+## 友元(friend)
 
+友元分为几种情况(友元就是帮助访问私有变量)
+- 让全局函数做友元
+- 让类做友元
+- 成员函数做友元
+
+1. 全局函数做友元
+
+当我们需要全局函数，来访问类中的私有属性时，就需要使用关键字friend(友元)操作.
+
+```
+class Person
+{
+    friend void getInfo(Person &p); // 在最前面声明友元函数，使用关键字friend声明
+  private:
+    int age;
+  public:
+    string name;
+  public:
+    Person(string name, int age):age(age), name(name){};
+};
+
+
+void getInfo(Person &p)
+{
+    cout << "name: " << p.name << endl;
+    cout << "age: " << p.age << endl;
+}
+```
+
+- [参考代码](./code/day22/demo3.cpp) 
+
+2. 类做友元
+
+```
+friend class Person; // 重要的就这一行代码
+```
+
+完整代码如下：
+
+```
+class Building
+{
+    friend class Person; // 重要的就这一行代码
+  public:
+    Building():livingRoom("客厅"), bedRoom("卧室"){}
+
+  public:
+    string livingRoom;
+
+  private:
+    string bedRoom;
+
+};
+```
+- [参考代码](./code/day22/demo4.cpp) 
+
+3. 成员函数做友元
+
+场景：现在有两个类，A类有公有属性和私有属性，B有2个方法，现在需要其中一个方法
+可以访问A中的私有属性，另一个方法不能访问。
+
+
+
+
+[这里会引入一个知识点，前置声明, 参考前面的笔记](#类的声明(包括前置声明)) 
+
+- [这样使用前置声明会报错](./code/day22/demo5.cpp) 
+
+- [正确代码看demo6.cpp](./code/day22/demo6.cpp) 
+
+
+关键有两点：
+```
+关键点1:
+
+// person 类的实现, 这里person的构造函数，要初始化，使用new开辟一个指针
+// Building是类，写法如下
+class Person
+{
+  public:
+    Person();
+    void visit1(); // 让visit1可以访问building里面的私有内容
+    void visit2(); // visit2不可以访问私有内容
+  public:
+    Building *home; // 这里只是声明了home指针，还应该初始化
+};
+
+Person::Person()
+{
+    home = new Building;
+}
+
+
+关键点2: 友元的声明, 注意要说明是Person类中的visit1函数
+
+friend void Person::visit1();
+```
 
 [【↥ back to top】](#目录)
 # 模板(TODO)
