@@ -78,6 +78,7 @@
    * [运算符](#运算符)
       * [常见运算符](#常见运算符)
       * [sizeof 运算符](#sizeof-运算符)
+      * [typeid运算符](#typeid运算符)
       * [逗号运算符](#逗号运算符)
    * [类型转换](#类型转换)
    * [隐式转换：(看操作符是左结合律还是右结合律)](#隐式转换看操作符是左结合律还是右结合律)
@@ -129,10 +130,15 @@
    * [cpp模板](#cpp模板)
    * [普通函数与模板的调用规则](#普通函数与模板的调用规则)
    * [模板的局限性(TODO)](#模板的局限性todo)
+   * [类模板](#类模板)
+   * [类模板中成员函数的调用时机](#类模板中成员函数的调用时机)
+   * [类模板做函数参数](#类模板做函数参数)
+* [day24](#day24)
    * [初识STL](#初识stl)
+   * [vector容器](#vector容器)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 9月 9日 星期四 22时39分42秒 CST -->
+<!-- Added by: zwl, at: 2021年 9月10日 星期五 20时11分57秒 CST -->
 
 <!--te-->
 
@@ -2038,6 +2044,14 @@ void FindOdd()
     cout << endl;
 }
 ```
+### typeid运算符
+
+如果想查看数据的类型，可以使用typeid().name()来查看，例子如下：
+
+```
+cout << typeid(T1).name() << endl;
+cout << typeid(T2).name() << endl;
+```
 
 ### 逗号运算符
 
@@ -3511,8 +3525,6 @@ Person::Person()
 friend void Person::visit1();
 ```
 
-
-
 [【↥ back to top】](#目录)
 # day 23
 
@@ -3581,16 +3593,114 @@ Swamp<int>(a, b); // 注意：最好不要使用自动推导类型
 视频参考：https://www.bilibili.com/video/BV1et411b73Z?p=173
 
 
-如果数据类型不同怎么处理？
+如果数据类型不同怎么处理？可以指定多个类型
 
 ```
+template <class T1, class T2>
+```
 
+## 类模板
+
+和函数模板一样，只不过模板后面紧跟着类，不过要注意以下几点：
+
+- [参考代码](./code/day23/demo4.cpp) 
+
+```
+1. 定义类模板
+template <class nameType, class ageType>
+class Person
+{};
+
+2. 为模板指定多个类型
+Person<string, int> p1("miki", 22);
+
+3. 类模板可以指定默认的参数类型
+template <class nameType, class ageType=int>
+class Person
+{};
+
+调用：
+Person<string> p1("miki", 22);
+```
+
+## 类模板中成员函数的调用时机
+
+总结就是：类模板成员函数，只要还没有调用，编译是不会出错的，只有在调用的时候，
+类型确定了，才会报错.
+
+- [参考代码](./code/day23/demo5.cpp) 
+
+## 类模板做函数参数
+
+1. 指定参数传入, [参考代码](./code/day23/demo6.cpp) 
+
+```
+void showPerson(Person<string, int> &p) // 定义
+{
+    cout << p.name << endl;
+    cout << p.age << endl;
+}
+
+int main()
+{
+    Person<string, int> p1("miki", 22); // 调用
+    showPerson(p1);
+}
+```
+
+2. 参数模板化
+
+```
+template <class T1, class T2>
+void showPerson2(Person<T1, T2> &p) // 就是将方式1换成模板
+{
+    cout << p.name << endl;
+    cout << p.age << endl;
+}
+
+int main()
+{
+    Person<string, int> p1("miki", 22);
+    //showPerson1(p1);
+    showPerson2(p1);
+}
+```
+
+3. 将整个模板化
+
+```
+template <class T>
+void showPerson3(T &p)
+{
+    cout << p.name << endl;
+    cout << p.age << endl;
+}
+
+int main()
+{
+    Person<string, int> p1("miki", 22);
+    showPerson3(p1);
+}
 ```
 
 
-
+[【↥ back to top】](#目录)
+# day24
 
 ## 初识STL
+
+STL属于模板，为了避免重复造轮子，并且统一了标准，主要分为以下几个部分：
+
+1. 容器: 各种数据结构，vector list deque set map，用来存放数据
+2. 算法: 各种常见的算法 sort find copy for_each
+3. 迭代器: 连接容器与算法的胶合剂
+4. 仿函数
+5. 适配器
+6. 空间配置器
+
+总之，STL与数据结构与算法很常用
+
+## vector容器
 
 
 [【↥ back to top】](#目录)
@@ -3598,6 +3708,9 @@ Swamp<int>(a, b); // 注意：最好不要使用自动推导类型
 
 - [ ] 121-166内容先跳过, 不然不好刷力扣(TODO)
 > 课程：https://www.bilibili.com/video/BV1et411b73Z?p=121
+
+- [ ] 178-184内容先跳过
+> https://www.bilibili.com/video/BV1et411b73Z?p=178&spm_id_from=pageDriver
 
 
 - [ ] cpp中的link原理
