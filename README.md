@@ -62,13 +62,28 @@
    * [字符串](#字符串)
 * [day14 知识巩固](#day14-知识巩固)
 * [day15](#day15)
-   * [字符串补充](#字符串补充)
+   * [字符串容器(string补充)](#字符串容器string补充)
+      * [字符串初始化](#字符串初始化)
+      * [string赋值操作](#string赋值操作)
+      * [字符串的输入流与输出流](#字符串的输入流与输出流)
+      * [字符串拼接](#字符串拼接)
+      * [用户输入字符串](#用户输入字符串)
+      * [字符串的查找和替换](#字符串的查找和替换)
+      * [获取字符串长度](#获取字符串长度)
+      * [字符串大小比较](#字符串大小比较)
+      * [字符串的拼接](#字符串的拼接)
+      * [字符串遍历](#字符串遍历)
+      * [字符串内容的存改](#字符串内容的存改)
+      * [字符串的插入与删除](#字符串的插入与删除)
+      * [字符串子串获取](#字符串子串获取)
    * [vector](#vector)
       * [使用](#使用)
       * [定义和初始化](#定义和初始化)
       * [向vector中添加元素](#向vector中添加元素)
       * [其他vector操作](#其他vector操作)
-      * [迭代器](#迭代器)
+      * [迭代器(遍历)](#迭代器遍历)
+      * [存放自定义类型数据](#存放自定义类型数据)
+      * [容器的嵌套](#容器的嵌套)
       * [函数返回和读取一个张量](#函数返回和读取一个张量)
       * [向量的拷贝](#向量的拷贝)
    * [数组补充](#数组补充)
@@ -138,7 +153,7 @@
    * [vector容器](#vector容器)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 9月10日 星期五 20时11分57秒 CST -->
+<!-- Added by: zwl, at: 2021年 9月12日 星期日 21时41分39秒 CST -->
 
 <!--te-->
 
@@ -1645,15 +1660,80 @@ using namespace std;
 [【↥ back to top】](#目录)
 # day15
 
-## 字符串补充
+## 字符串容器(string补充)
 
-1. 输入流和输出流：
+字符串容器是一个类对象，里面帮我们封装了很多方法，可以直接作用在字符串上
+
+### 字符串初始化
+
+```
+const char* str = "Hello world"; // c语言的字符串格式
+string s0 = "Hello world"; // 直接初始化string字符串
+string s1(str); // 通过c语言的字符串，来初始化string
+string s2(s0); // 拷贝构造，通过另一个string来初始化一个string
+string s3(10, 'a'); // int num, char c 来复制多个字符，拼接成一个字符串
+```
+
+### string赋值操作
+
+赋值操作有两种方法：
+- 等号直接赋值
+- assign()方法赋值
+
+```
+string s1 = s0;
+
+string s2 = "hello world";
+
+string s3;
+s3 = 'a';
+
+string s4;
+//s4.assign("hello world", 5); // 将s2之前的字符串赋值
+s4.assign(s2, 1); // 将s2后面的字符串赋值给s4
+
+string s5;
+s5.assign(s2);
+
+string s6;
+s6.assign(10, 'a');
+```
+
+- [参考代码](./code/day24/demo5.cpp) 
+
+
+### 字符串的输入流与输出流
 
 - std::cin 输入流 从第一个非空白字符开始, 到下一个空白字符结束
 - std::cout 输出流
 - 如果要读取一行，使用`getline(cin, stringVar)`，如果想读取一个单词，以空格分隔，直接使用`cin`
 
-2. 字符串拼接
+### 字符串拼接
+
+拼接主要有两种操作：
+- 重载运算符 `+=` 
+- append 操作
+
+```
+    string s1 = "I";
+
+    s1 += " love ";
+
+    cout << s1 << endl;
+    
+    string s2 = " you";
+    s1 += s2;
+    cout << s1 << endl;   
+
+    s1.append(".");
+    cout << s1 << endl;   
+    
+    string s3 = "hello world";
+    s1.append(s3, 0, 5); // 将s3从位置0开始，往后5个字符拼接到后面
+    cout << s1 << endl;
+```
+
+- 参考代码：[code](./code/day24/demo6.cpp) 
 
 字符串字面值和string类型不一样，字符串字面值是不能直接拼接的，
 
@@ -1661,7 +1741,9 @@ using namespace std;
 string("Hello") + "world" // 其中一个必须是string类型
 ```
 
-3. getline(InputStream, s)
+### 用户输入字符串
+
+- getline(InputStream, s)
 
 接受输入，直到用户输入换行停止
 
@@ -1679,7 +1761,31 @@ while (getline(cin, s)) // cin是返回输入流
 }
 ```
 
-4. 比较字符串长度 s.size() 和字符串大小
+### 字符串的查找和替换
+
+字符串的查找：
+
+- find()
+- rfind()
+
+字符串的替换：
+
+- replace()
+
+例子：
+
+```
+string s1 = "ABCDABCD";
+int pos = s1.find("A"); // 从左往右边查找
+
+pos = s1.rfind("A"); // 从右往前查找
+
+s1.replace(pos, 1, "1111"); // 从0号位置开始计算字符，将1个字符替换成后面4个字符
+```
+
+### 获取字符串长度
+
+比较字符串长度 s.size() 和字符串大小
 
 字符串长度：
 
@@ -1687,9 +1793,15 @@ while (getline(cin, s)) // cin是返回输入流
 s1.size() >= s2.size();
 ```
 
+### 字符串大小比较
+
 字符串大小：从左到右，逐个字符比较，ascii码比较大的那个.
 
-5. 字符串的拼接
+```
+s1.compare(s2);
+```
+
+### 字符串的拼接
 
 ```
 void concate()
@@ -1703,7 +1815,7 @@ void concate()
 }
 ```
 
-6. 字符串遍历
+### 字符串遍历
 
 在cpp11中，使用下面方式遍历字符串, `for (auto c : string)`  
 
@@ -1732,6 +1844,46 @@ cout << s << endl;
 ```
 
 上面这种写法是范围for语句，不同于传统的for语句，是cpp11的特性.
+
+### 字符串内容的存改
+
+字符串中每个单元是可以修改与访问的.
+
+访问：
+- at
+- `[]`
+
+```
+// 读
+string s1 = "hello world";
+cout << s1[0] << endl;
+cout << s1.at(0) << endl;
+
+// 改
+s1[0] = 'x';
+s1.at(0) = 'x';
+```
+
+### 字符串的插入与删除
+
+- insert()
+- erase()
+
+```
+string s1 = "hello "
+s1.insert(1, "11") // h11ello 
+
+s1.erase(1, 2) // 从位置1开始，删掉后面两个字符
+```
+
+### 字符串子串获取
+
+- substr()
+
+```
+string s1 = "hello";
+string sub = s1.substr(0, 1) // h 从0开始，往后数1个字符
+```
 
 ## vector
 
@@ -1762,13 +1914,13 @@ v.push_back(e) // 在尾部添加元素
 ### 其他vector操作
 
 - `v.size()` 返回元素的个数
-- `v.push_back(t)` 
+- `v.push_back(t)` 在数组末尾添加元素
 - `v[n]` 
 - `v1 == v2` 
 - `v1 != v2` 
 - `<, <=, >, >=` 
 
-### 迭代器
+### 迭代器(遍历)
 
 所有容器都可以使用迭代器的功能, 我们可以通过下标来访问容器里面的元素内容，也可
 以使用迭代器来访问容器内容。
@@ -1790,10 +1942,15 @@ v.push_back(e) // 在尾部添加元素
 准确来说是迭代器返回的类型是什么？(迭代器的类型 iterator and const_iterator)
 
 ```
-    string name = "miki zhu";
-    auto it = name.begin();
-    cout << "input data type is: " << typeid(it).name() << endl;
+string name = "miki zhu";
+auto it = name.begin();
+cout << "input data type is: " << typeid(it).name() << endl;
 ```
+
+还有一种不用auto的方法初始化迭代器：
+
+- [参考代码](./code/day24/demo1.cpp) 
+
 
 遍历迭代器内容：
 
@@ -1817,6 +1974,40 @@ c++ 中定义了箭头运算符(->)
 ```
 *(it).empty(); and it->empty(); 两个写法一样
 ```
+### 存放自定义类型数据
+
+主要有两种情况:
+- 存放类对象
+- 存放指针
+- [参考代码](./code/day24/demo2.cpp) 
+
+```
+1. 存放自定义类型
+vector<Person> v;
+
+2. 存放指针
+vector<Person*> v;
+```
+
+### 容器的嵌套
+
+用vector容器实现一个二维数组, 注意要c++ 11 以后才能初始化
+
+```
+vector<vector<int> > v;
+
+vector<int> v1 = {1, 2, 3};
+vector<int> v2 = {4, 5, 6};
+vector<int> v3 = {7, 8, 9};
+
+v.push_back(v1);
+v.push_back(v2);
+v.push_back(v3);
+```
+
+- [参考代码](./code/day24/demo3.cpp) 
+- 运行代码`g++ -std=c++11 demo3.cpp` 
+
 
 ### 函数返回和读取一个张量
 
