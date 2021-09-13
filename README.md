@@ -89,6 +89,12 @@
    * [数组补充](#数组补充)
       * [数组中的拷贝](#数组中的拷贝)
       * [获得数组的长度(begin end)](#获得数组的长度begin-end)
+      * [vector动态拓展&amp;赋值](#vector动态拓展赋值)
+      * [vector容量大小](#vector容量大小)
+      * [vector的插入和删除](#vector的插入和删除)
+      * [vector容器的数据存取](#vector容器的数据存取)
+      * [vector互换容器(可用于内存收缩)](#vector互换容器可用于内存收缩)
+      * [vector预留空间](#vector预留空间)
 * [day16 表达式](#day16-表达式)
    * [运算符](#运算符)
       * [常见运算符](#常见运算符)
@@ -150,10 +156,27 @@
    * [类模板做函数参数](#类模板做函数参数)
 * [day24](#day24)
    * [初识STL](#初识stl)
-   * [vector容器](#vector容器)
+   * [deque容器](#deque容器)
+      * [deque初始化](#deque初始化)
+      * [只读模式遍历](#只读模式遍历)
+      * [deque与vector的不同](#deque与vector的不同)
+      * [deque的插入与删除](#deque的插入与删除)
+   * [stack容器](#stack容器)
+   * [queue容器](#queue容器)
+   * [list链表](#list链表)
+      * [list的构造函数](#list的构造函数)
+      * [list赋值和交换](#list赋值和交换)
+      * [list大小操作](#list大小操作)
+      * [list插入和删除](#list插入和删除)
+      * [list元素的访问](#list元素的访问)
+      * [反转和自定义数据排序](#反转和自定义数据排序)
+   * [set和multiset容器](#set和multiset容器)
+      * [set大小](#set大小)
+      * [插入和删除](#插入和删除)
+      * [元素查找与统计](#元素查找与统计)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 9月12日 星期日 21时41分39秒 CST -->
+<!-- Added by: zwl, at: 2021年 9月13日 星期一 20时32分20秒 CST -->
 
 <!--te-->
 
@@ -2111,6 +2134,142 @@ int main()
 }
 ```
 
+### vector动态拓展&赋值
+
+定义一般的数组，是不能拓展的，使用vector数组，是可以动态拓展的，动态拓展指的是
+：将原有内存内容，拷贝到一个新的更大空间内存中，同时释放原空间
+
+赋值有两个方法：
+
+- 等号赋值
+- assign赋值
+
+```
+// 初始化
+vector<int> v;
+v.push_back(0);
+vector<int> v1(v);
+vector<int> v1(10, 100);
+vector<int> v1(v.begin(), v.end());
+
+// 赋值
+vector<int> v1 = v;
+
+vector<int> v1;
+v1.assign(v);
+
+v1.assign(10, 100);
+```
+### vector容量大小
+
+```
+vector<int> v;
+v.empty(); // 判断容器是否为空
+v.capacity(); // 判断容器的容量大小，一般会为size长度预留位置，如果不停push
+back进去超过容量，则会申请新的空间
+v.size(); // 获取数据长度，一般小于等于容器容量
+v.resize(); // 将数据长度重新设置，这里有两种情况
+
+```
+
+resize()的两种情况：
+```
+// 假设数据为1 2 3 4
+1. 当resize为6的时候，数据就会变成 1 2 3 4 0 0，默认是填充0
+可以设置默认填充, resize(6, 10) then 1 2 3 4 10 10
+
+2. 当resize长度小于size的时候，数据就会被删除 1 2 
+```
+
+### vector的插入和删除
+
+主要用到以下几种方法：
+
+- push_back 在尾部插入元素
+- pop_back 在尾部弹出元素
+- insert 在指定位置插入元素
+- erase 删除指定元素
+- clear 删除所有元素
+
+```
+// 介绍下常见的几种
+
+vector<v1> v;
+
+v.push_back(10); // 10
+v.push_back(20); // 10 20
+
+v.pop_back(); // 10
+
+v.insert(v.begin(), 20) // 20, 10 第一个位置传迭代器，然后指定插入的元素
+v.insert(v.begin(), 2, 20) // 20 20 20 10 可以指定第二个位置插入多少个
+
+v.erase(v.begin()); // 传入的也是迭代器的位置
+v.erase(v.begin(), v.end()) // 传入的可以是区间，但必须是迭代器
+
+v.clear(); // 删除所有元素
+```
+
+### vector容器的数据存取
+
+- at(pos) 获取指定位置的元素
+- 重载的[] 获取指定位置的元素
+- front() 获取第一个位置元素
+- back() 获取最后一个位置的元素
+
+### vector互换容器(可用于内存收缩)
+
+- swap
+
+```
+v.swap(v1); // v变成v1， v1变成v
+print<int>(v);
+print<int>(v1);
+```
+
+- 使用swap进行内存收缩
+
+```
+//使用swap节省空间, 前面我们看到容量是16，长度是10，数据量大的时候，会预留很多空间
+// 为了节省这些空间
+
+vector<int>(v).swap(v);
+cout << "size of v: " << v.size() << endl;
+cout << "capacity of v: " << v.capacity() << endl;
+```
+
+```
+// 这行代码的意思是
+// 使用vector<int>(v) 创建一个匿名函数，因为没有东西指向匿名函数，所以过了这行
+，匿名函数的内存就会自动释放掉
+// 拷贝初始化会根据v的size来创建内存，不会生成额外空间
+vector<int>(v).swap(v);
+```
+
+为什么会生成额外空间呢？为了让你方便在后面添加元素，如果不生成，要申请内存，然
+后拷贝数据，这样速度会相当慢
+
+### vector预留空间
+
+```
+    vector<int> v;
+    int *p = NULL;
+    int count = 0;
+    // 如果知道数据大小，可以先预留空间，但是申请的空间无法访问
+    v.reserve(10000);
+    for (int i = 0; i < 10000; i++)
+    {
+        v.push_back(i);
+        // 统计指针变换了多少次，因为每次内存不够，就会换新的地址
+        if (p != &v[0])
+        {
+            p = &v[0];
+            count++;
+        }
+    }
+```
+
+- [参考代码](./code/day25/demo2.cpp) 
 
 [【↥ back to top】](#目录)
 # day16 表达式
@@ -3891,7 +4050,293 @@ STL属于模板，为了避免重复造轮子，并且统一了标准，主要�
 
 总之，STL与数据结构与算法很常用
 
-## vector容器
+## deque容器
+
+当我们要在容器头部插入数据的时候，vector容器插入会比较慢, 要将数据往后移动，然后再添加进去，deque是队列，在头部
+插入会比较快。 deque的结构为：
+
+1. 控制部分
+2. 存储部分
+
+其中控制部分管理存储部分的地址，存储部分用来存储数据, 当我们要在前面插入新数据
+的时候，函数内部会判断是否有空间预留，如果没有，就开辟一个新缓存区，然后将数据
+从尾部添加，同时将缓存区地址放到控制部分管理
+
+
+### deque初始化
+
+和vector一模一样
+
+```
+#include<deque>
+
+deque<int> d;
+d.push_back(10);
+
+deque<int> d(2, 10); // 10 10
+
+deque<int> d(d1);
+```
+
+### 只读模式遍历
+
+只读模式意味着不能修改其中的内容
+- 传入要加const
+- 迭代器要用const_iterator
+
+```
+void print(const deque<int> &d)
+{
+  for (deque<int>::const_iterator it = d.begin(); it != d.end(); it++)
+  {
+      cout << *it << endl;
+  }
+}
+```
+
+### deque与vector的不同
+
+1. 赋值方面几乎一样
+2. 大小操作，deque没有capacity概念
+3. 数据存取和vector一样
+4. 排序都是使用sort算法
+
+### deque的插入与删除
+
+deque可以 头插，头删，尾插，尾删
+
+- push_front()
+- pop_front()
+- push_back()
+- pop_back()
+
+指定位置插入：
+
+- insert(d.begin(), 10) // 传入迭代器，在指定位置插入
+- insert(d.begin(), 2, 10) // 在指定位置插入多个元素
+- insert(d.begin(), d2.begin(), d2.end()) // 在指定位置插入一个区间的元素
+
+删除：
+
+- erase(d.begin()) // 删除指定位置
+- erase(d.begin(), d.end()) // 删除一个区间
+- clear() // 
+
+## stack容器
+
+栈容器是一种先进后出的数据结构，其可以使用的函数方法有：
+
+- push() 添加元素
+- top() 返会栈顶的元素
+- pop() 将数据弹出
+- empty() 判断栈是否为空
+- size() 返回栈的大小
+
+栈中只有顶端的数据可以使用，所以不允许遍历行为
+
+## queue容器
+
+队列是一种先进先出的容器，其只有队头和队尾的数据可以访问，所以仍然不允许有赋值
+操作，常见的方法有：
+- push() 添加元素
+- empty() 判断是否为空
+- front() 查看队头元素
+- pop() 弹出队头元素
+- back() 查看队尾元素
+- size() 查看队列的元素个数
+
+## list链表
+
+链表是由节点node组成，每个节点包括两个部分内容，1是数据存储，2是下一个节点的地
+址信息
+
+链表相对于vector的优点和缺点：
+
+> 优点主要有：插入和删除元素非常快, 而vector比较慢
+> 缺点有: 遍历速度比vector慢，并且消耗的存储空间比vector多，因为链表在物理上是不连续的
+> ，所以访问比较慢，并且list不仅要存储数据，还要存储地址
+
+cpp 中的链表是一个双向的结构，链表数据存储了之前数据的地址，也存储了下一个数据
+的地址
+
+由于list链表在物理空间上是不连续的，所以如果要遍历链表，不能随机访问，只能一个
+个访问
+
+### list的构造函数
+
+初始化list的方式有如下：
+
+```
+#include<list>
+
+list<int> l1;
+l1.push_back(10);
+l1.push_back(20);
+
+
+list<int> l2(2, 10); // 10 10 
+
+list<int> l2(l1); // 拷贝构造
+
+list<int> l2(l1.begin(), l2.begin()); // 传入区间
+```
+
+### list赋值和交换
+
+赋值
+
+- `=` 
+- assign()
+
+```
+list<int> l1;
+l1.push_back(10);
+l1.push_back(20);
+
+list<int> l2 = l1;
+l2.assign(l1.begin(), l1.end());
+l2.assign(2, 10); // 10 10 
+```
+
+交换
+
+- swap()
+
+```
+l1.swap(l2);
+```
+
+### list大小操作
+
+- size() 
+- empty()
+- resize(10) 指定长度，多余的会被删除
+- resize(10, 100) 设置填充为100，否则默认填充0
+
+### list插入和删除
+
+- push_back()
+- push_front()
+- pop_back()
+- pop_front()
+- insert(pos, 10)
+- insert(pos, l1.begin(), l1.end())
+- erase(l1.begin())
+- erase(l1.begin(), l1.end())
+- clear()
+- remove(10) 删除所有元素是10的节点
+
+### list元素的访问
+
+链表元素是不能随机访问的，也就是不支持以下操作
+
+```
+l1[0];
+l1.at(0);
+```
+只能通过以下方式访问：
+
+```
+l1.front();
+l1.back();
+
+list<int>::iterator it=l1.begin();
+l1++; // 迭代器不能l1 = l1 + 1; 这种操作，因为没有+运算符这个
+cout << *l1 << endl;
+```
+
+### 反转和自定义数据排序
+
+- reverse()
+- sort()
+
+```
+l1.reverse();
+l1.sort(); // 默认从小到大排序
+
+如果想从大到小排序，那么要自己指定规则
+
+bool myCompare(int v1, int v2)
+{
+  return v1 > v2;
+}
+l1.sort(myCompare);
+```
+
+- 自定义数据排序, [参考代码](./code/day25/demo3.cpp) 
+
+要实现的需求，每个人有年龄和身高两个属性，按照年龄从小到大排序，如果年龄相同，
+则按照身高从小到大排序
+
+```
+// 因为是要返回true或false所以要设置为bool类型
+bool mySort(Person &p1, Person &p2) // 使用list内部的sort算法，要告诉规则，因
+为每个链表的元素是Person类型，所以这里定义Person类型, 注意使用引用的方式
+{
+    if (p1.age == p2.age && p1.height < p2.height) // 很直观的编程：如果年龄相
+      同，则按身高排序
+        return true;
+    return p1.age < p2.age;
+}
+```
+## set和multiset容器
+
+- set容器中元素不可以重复，并且默认数据是从小到大排序的
+- multiset可以重复，也是排序好的
+
+```
+set<int> st;
+st.insert(10);
+st.insert(10);
+st.insert(40);
+st.insert(30);
+st.insert(20);
+
+set<int> st1 = st;
+set<int> st1(st);
+
+multiset<int> st; //multiset 的使用
+```
+
+遍历写法：
+```
+void print(set<int> &p)
+{
+    for (set<int>::iterator it = p.begin(); it != p.end(); it++)
+        cout << *it << " ";
+    cout << endl;
+}
+```
+
+### set大小
+
+- swap()
+- size()
+- empty()
+
+### 插入和删除
+- insert()
+- erase(st.begin(), st.end())
+- erase(st.begin())
+- clear()
+
+### 元素查找与统计
+
+- find()
+- count()
+
+```
+set<int> s1;
+s1.insert(10);
+s1.insert(20);
+s1.insert(30);
+
+set<int>::iterator pt = s1.find(10);
+if (pt != s1.end()) // 则找到了元素, 否则没找到
+
+
+cout << *pt << endl;
+```
 
 
 [【↥ back to top】](#目录)
