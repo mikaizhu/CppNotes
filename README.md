@@ -174,9 +174,19 @@
       * [set大小](#set大小)
       * [插入和删除](#插入和删除)
       * [元素查找与统计](#元素查找与统计)
+      * [对组pair的创建(函数返回多值)](#对组pair的创建函数返回多值)
+   * [map容器](#map容器)
+      * [map的构造和赋值](#map的构造和赋值)
+      * [map的遍历](#map的遍历)
+      * [map大小和交换](#map大小和交换)
+      * [map的插入访问和删除](#map的插入访问和删除)
+      * [map查找与统计](#map查找与统计)
+* [day26](#day26)
+   * [常用遍历算法for_each 和 transform](#常用遍历算法for_each-和-transform)
+   * [常用查找算法](#常用查找算法)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 9月13日 星期一 20时32分20秒 CST -->
+<!-- Added by: zwl, at: 2021年 9月14日 星期二 14时42分22秒 CST -->
 
 <!--te-->
 
@@ -4338,6 +4348,127 @@ if (pt != s1.end()) // 则找到了元素, 否则没找到
 cout << *pt << endl;
 ```
 
+### 对组pair的创建(函数返回多值)
+
+有两种方式创建：
+
+```
+pair<int, int> p = make_pair(10, 20);
+pair<int, int> p(10, 20);
+```
+
+利用pair让函数返回多个值:
+- 使用first获取第一个值，second获取第二个值
+
+```
+pair<int, int> test()
+{
+    pair<int, int> p = make_pair(10, 20);
+    return p;
+}
+
+int main()
+{
+    pair<int, int> p = test();
+    cout << p.first << " " << p.second << endl;
+}
+```
+
+## map容器
+
+### map的构造和赋值
+
+map 是有键和值的，并且键是独一无二的，不能有重复，cpp中的map，会自动按键进行排
+序。
+
+- insert
+
+```
+#include <map>
+
+map<int, int> m;
+m.insert(pair<int, int>(1, 10))
+m.insert(pair<int, int>(1, 20)) // 会发现这个数据插入不进去
+```
+
+### map的遍历
+
+```
+void print(map<int, int> &p)
+{
+    for(map<int, int>::iterator it=p.begin(); it != p.end(); it++)
+        cout << it->first << " " << it->second << endl;
+}
+```
+
+### map大小和交换
+
+- size()
+- swap()
+- empty()
+
+### map的插入访问和删除
+
+- 以下三种方式插入数据
+
+```
+map<int, int> m;
+m.insert(pair<int, int>(1, 10)) // 1
+m.insert(make_pair(1, 10)) // 2
+m[1] = 10; // 3 建议只使用这种方式查找数据，而不是赋值，默认赋值为0
+```
+
+- 查找数据
+
+```
+m[1]
+```
+
+- 删除数据, erase , 注意就是erase可以根据键来删除元素
+
+```
+m.erase(m.begin());
+m.erase(3); 
+m.erase(m.begin(), m.end()); // 相当于m.clear()
+```
+
+### map查找与统计
+
+- find() // 查找key是否存在，如果存在，则返回这个key的迭代器，如果不存在，则返
+  回end迭代器
+- count() // 统计key的个数
+
+```
+map<int, int>::iterator it = m.find(3);
+if (it != m.end())
+  cout << "找到了元素" << endl;
+```
+
+
+[【↥ back to top】](#目录)
+# day26
+
+## 常用遍历算法for_each 和 transform
+
+```
+#include<algorithm>
+for_each(v.begin(), v.end(), myPrint);
+```
+
+## 常用查找算法
+
+- find
+- find_if
+- binary_search
+- count
+- count_if
+
+
+```
+
+```
+
+
 
 [【↥ back to top】](#目录)
 # TODO
@@ -4348,6 +4479,11 @@ cout << *pt << endl;
 - [ ] 178-184内容先跳过
 > https://www.bilibili.com/video/BV1et411b73Z?p=178&spm_id_from=pageDriver
 
+- [ ] set 容器自定义排序p 229-230先跳过，因为涉及到重载运算符
+> https://www.bilibili.com/video/BV1et411b73Z?p=229&spm_id_from=pageDriver
+
+- [ ] map容器中的排序 先跳过 p 235 - 242都跳过了
+> bilibili.com/video/BV1et411b73Z?p=235
 
 - [ ] cpp中的link原理
 
