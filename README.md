@@ -181,12 +181,13 @@
       * [map大小和交换](#map大小和交换)
       * [map的插入访问和删除](#map的插入访问和删除)
       * [map查找与统计](#map查找与统计)
+      * [unordered_map](#unordered_map)
 * [day26](#day26)
    * [常用遍历算法for_each 和 transform](#常用遍历算法for_each-和-transform)
    * [常用查找算法](#常用查找算法)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 9月14日 星期二 14时42分22秒 CST -->
+<!-- Added by: zwl, at: 2021年 9月14日 星期二 21时14分46秒 CST -->
 
 <!--te-->
 
@@ -4443,6 +4444,37 @@ map<int, int>::iterator it = m.find(3);
 if (it != m.end())
   cout << "找到了元素" << endl;
 ```
+
+### unordered_map
+
+需要用到的容器unordered_map, 普通的map是有序的，按照key进行排序，这里不需要有
+序
+
+初始化的方式, 参考：https://en.cppreference.com/w/cpp/container/unordered_map
+
+```
+#include <unordered_map>
+int main()
+{
+    unordered_map<int, int> m = {
+        {1, 2},
+        {2, 3},
+        {3, 4},
+    };
+
+    m.insert({4, 5})
+
+    print(m);
+}
+```
+
+修改字典中的值：
+
+```
+m[1] = 7;
+```
+
+- 参考代码, [code](./code/day25/demo7.cpp) 
 
 
 [【↥ back to top】](#目录)
