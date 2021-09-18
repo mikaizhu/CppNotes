@@ -183,11 +183,18 @@
       * [map查找与统计](#map查找与统计)
       * [unordered_map](#unordered_map)
 * [day26](#day26)
+   * [匿名函数](#匿名函数)
+   * [加运算符重载](#加运算符重载)
+   * [左移运算符重载](#左移运算符重载)
+   * [递增运算符重载](#递增运算符重载)
+   * [函数运算符重载(仿函数)](#函数运算符重载仿函数)
+   * [函数对象](#函数对象)
+   * [谓词](#谓词)
    * [常用遍历算法for_each 和 transform](#常用遍历算法for_each-和-transform)
    * [常用查找算法](#常用查找算法)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 9月14日 星期二 21时14分46秒 CST -->
+<!-- Added by: zwl, at: 2021年 9月18日 星期六 17时04分02秒 CST -->
 
 <!--te-->
 
@@ -4480,6 +4487,257 @@ m[1] = 7;
 [【↥ back to top】](#目录)
 # day26
 
+## 匿名函数
+
+参考：https://www.jianshu.com/p/d686ad9de817
+
+我们定义一个可以输出字符串的lambda表达式，表达式一般都是从方括号[]开始，然后结束于花括号{}，花括号里面就像定义函数那样，包含了lamdba表达式体：
+
+```
+// 定义简单的lambda表达式
+auto basicLambda = [] { cout << "Hello, world!" << endl; };
+// 调用
+basicLambda();   // 输出：Hello, world!
+```
+
+上面是最简单的lambda表达式，没有参数。如果需要参数，那么就要像函数那样，放在圆括号里面，如果有返回值，返回类型要放在->后面，即拖尾返回类型，当然你也可以忽略返回类型，lambda会帮你自动推断出返回类型：
+
+```
+// 指明返回类型
+auto add = [](int a, int b) -> int { return a + b; };
+// 自动推断返回类型
+auto multiply = [](int a, int b) { return a * b; };
+
+int sum = add(2, 5);   // 输出：7
+int product = multiply(2, 5);  // 输出：10
+```
+
+用途，自定义方法，改变排序方式：
+
+```
+vector<vector<int> > v;
+v = {
+    {1, 2},
+    {2, 4},
+    {1, 3},
+};
+
+sort(v.begin(), v.end(), [](vector<int> &a, vector<int> &b){return a[1] < b[1];});
+print(v);
+```
+
+```
+1, 2
+1, 3
+2, 4
+```
+## 加运算符重载
+
+功能：对已有的运算符进行重新定制，赋予不同的功能
+
+假如要实现一个类的重载运算符，功能是两个类相加，然后创建一个新的类对象
+
+重载的函数名是`operator+` 
+
+写成成员函数是这样：
+```
+public:
+  Person operator+ (Person &p) // 定义函数返回的类型是Person
+  {
+      Person temp;
+      temp.a = this->a + p.a;
+      temp.b = this->b + p.b;
+      return temp;
+  }
+
+Person p1(1, 2);
+Person p2(1, 2);
+Person p = p1 + p2;
+```
+
+
+写成全局函数是这样:
+
+```
+Person operator+ (Person &p1, Person &p2)
+{
+    Person temp;
+    temp.a = p1.a + p2.a;
+    temp.b = p1.b + p2.b;
+    return temp;
+}
+
+
+// 调用方式也可以这样
+Person p1(1, 2);
+Person p2(1, 2);
+Person p = p1 + p2;
+```
+
+运算符函数也可以重载，经过上面定义后，+号变得只能识别两个person类相加了，我们
+还可以重载为整数相加:
+
+```
+Person operator+ (Person &p1, int a)
+{
+    Person temp;
+    temp.a = p1.a + a;
+    temp.b = p1.b + a;
+    return temp;
+}
+
+// 这样加号既能识别p1+p2
+// 也能识别p1 + 2
+```
+
+## 左移运算符重载
+
+假设要实现：
+
+1. 可以cout << 类
+2. 实现链式调用 cout << p << endl;
+
+左移运算符的重载，一般不写成成员函数重载，而使用全局函数重载，因为我们希望cout
+载左边，要输出的内容，在左移运算符的右边.
+
+为啥不能写在类中的成员函数呢？
+
+```
+// 如果在成员函数中，直接调用方法如下
+p.operator<<(cout)
+
+这样的简化写法是p << cout , 出现内容在左边，cout在右边
+```
+
+```
+void operator<< (ostream &out, Person &p)
+{
+    out << "a is: " << p.a << " b is: " << p.b;
+    out << endl;
+}
+
+// 成员函数的调用方式为 operator<<(cout, p)
+// 这样可以简化成 cout << p;
+```
+
+实现链式调用，上面全局函数返回的类型是void，要实现链式调用，那么返回的必须是输
+入流本身，所以不能设置为void
+
+和类中的链式调用一样，前面要加&, 并且返回的是输入流本身
+```
+ostream& operator<< (ostream &out, Person &p)
+{
+    out << "a is: " << p.a << " b is: " << p.b;
+    return out;
+}
+```
+
+## 递增运算符重载
+
+假如要实现类对象的++运算，++运算分为前置和后置。
+
+```
+// 先看看 ++a 与 a++的区别
+
+int a = 10;
+cout << ++a; // 输出a=11;
+cout << a++; // 先输出a=10;
+```
+
+先实现重载前置运算符:
+
+```
+Person operator++(int) // int 在这里是占位符号，用来表示后置运算符
+{
+    // 后置是先输出
+    Person temp = *this; // *this就是对象本身，这里创建一个暂时对象
+    this->a++;
+    this->b++;
+    return temp;
+}
+```
+
+- [参考代码](./code/day26/demo3.cpp) 
+
+
+## 函数运算符重载(仿函数)
+
+当我们要重新载入函数运算符`()`,其实指的是仿函数
+
+```
+class MyAdd
+{
+  public:
+    int operator()(int a, int b)
+    {
+        return a + b;
+    }
+};
+
+int main()
+{
+    // 调用方式1, 先创建一个对象, 然后通过对象调用重载函数运算符
+    MyAdd add;
+    cout << add(1, 2) << endl;
+    // 调用方式2，使用匿名函数调用, MyAdd() 就是在创建匿名函数
+    cout << MyAdd()(1, 2) << endl;
+}
+```
+
+## 函数对象
+
+```
+void DoJob(MyAdd &add, int a, int b)
+{
+    cout << add(a, b) << endl;
+}
+
+MyAdd add;
+DoJob(add, 1, 2); // 可以将名字直接传入函数中，作为函数的参数，然后在函数内部
+调用
+```
+
+## 谓词
+
+一元谓词和二元谓词, 是仿函数，但这个仿函数只能是bool类型的, 如果这个仿函数只接
+收一个参数，就叫一元谓词，两个参数叫二元谓词
+
+```
+// 仿函数
+// 一元谓词
+class Find
+{
+  public:
+    bool operator()(int num)
+    {
+        return num >= 5;
+    }
+};
+
+int main()
+{
+    vector<int> v;
+    for (int i = 0; i < 10; i++)
+        v.push_back(i);
+    vector<int>::iterator it = find_if(v.begin(), v.end(), Find()); // 使用匿名函数调用
+    cout << *it << endl;
+}
+```
+
+二元谓词
+
+```
+class MyCompare
+{
+  public:
+    bool operator()(int a, int b)
+    {
+        return a < b;
+    }
+};
+```
+
+
 ## 常用遍历算法for_each 和 transform
 
 ```
@@ -4494,11 +4752,6 @@ for_each(v.begin(), v.end(), myPrint);
 - binary_search
 - count
 - count_if
-
-
-```
-
-```
 
 
 
