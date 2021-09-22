@@ -64,6 +64,7 @@
 * [day15](#day15)
    * [字符串容器(string补充)](#字符串容器string补充)
       * [字符串初始化](#字符串初始化)
+      * [将char类型转换成字符串](#将char类型转换成字符串)
       * [string赋值操作](#string赋值操作)
       * [字符串的输入流与输出流](#字符串的输入流与输出流)
       * [字符串拼接](#字符串拼接)
@@ -82,6 +83,7 @@
       * [向vector中添加元素](#向vector中添加元素)
       * [其他vector操作](#其他vector操作)
       * [迭代器(遍历)](#迭代器遍历)
+      * [vector转set](#vector转set)
       * [存放自定义类型数据](#存放自定义类型数据)
       * [容器的嵌套](#容器的嵌套)
       * [函数返回和读取一个张量](#函数返回和读取一个张量)
@@ -171,6 +173,7 @@
       * [list元素的访问](#list元素的访问)
       * [反转和自定义数据排序](#反转和自定义数据排序)
    * [set和multiset容器](#set和multiset容器)
+      * [set转vector](#set转vector)
       * [set大小](#set大小)
       * [插入和删除](#插入和删除)
       * [元素查找与统计](#元素查找与统计)
@@ -194,7 +197,7 @@
    * [常用查找算法](#常用查找算法)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 9月18日 星期六 17时04分02秒 CST -->
+<!-- Added by: zwl, at: 2021年 9月22日 星期三 21时52分56秒 CST -->
 
 <!--te-->
 
@@ -1557,6 +1560,7 @@ class Player : public Entity
 int list[5]; // 一定要声明array的大小
 int list[5] = {1, 2, 3, 4, 5};
 int list[] = {1, 2, 3, 4, 5};
+int list[2] = {0} // 初始化为{0, 0}
 ```
 
 - 当我们定义了一个array的时候，这个array其实就是一个指针，如list
@@ -1714,6 +1718,23 @@ string s1(str); // 通过c语言的字符串，来初始化string
 string s2(s0); // 拷贝构造，通过另一个string来初始化一个string
 string s3(10, 'a'); // int num, char c 来复制多个字符，拼接成一个字符串
 ```
+### 将char类型转换成字符串
+
+```
+string s(1, 'a');
+```
+
+两个字符串相减或者相加，会变成整数
+
+```
+'a' - 'a' // 0
+```
+
+可以利用string将int/char转换成string
+```
+string s(1, 1 + 'a');
+```
+
 
 ### string赋值操作
 
@@ -2015,6 +2036,15 @@ c++ 中定义了箭头运算符(->)
 ```
 *(it).empty(); and it->empty(); 两个写法一样
 ```
+### vector转set
+
+
+```
+unordered_set<int> s(vector.begin(), vector.end());
+unordered_set<int>(vector.begin(), vector.end());
+```
+
+
 ### 存放自定义类型数据
 
 主要有两种情况:
@@ -2933,7 +2963,7 @@ s_glob_a: 4534468812
 **栈** : 函数中的变量就是存放在栈区域的，当函数调用完后，栈地址中的数据就会释
 放，所以不要在函数中返回局部变量的地址
 
-**堆* : 堆区域的数据是我们来管理他们的生命周期，使用new关键字来创建堆数据
+**堆** : 堆区域的数据是我们来管理他们的生命周期，使用new关键字来创建堆数据
 
 ```
 // new 关键字的基本语法
@@ -2947,7 +2977,8 @@ vector Vec; // 堆上创建向量
 
 int *p = new int(10); // new关键字返回的是一个地址，所以要指针来接收这个地址
 int *arr = new int[10]; // 使用new关键字创建一个数组
-vector* Vec = new vector; // 堆上创建向量
+vector* Vec = new vector; // 堆上创建向量, 只开辟空间，并没有初始化
+vector* Vec = new vector(); // 还可以调用构造函数
 
 
 delete p; // 释放一个整型数据
@@ -4325,6 +4356,25 @@ void print(set<int> &p)
     cout << endl;
 }
 ```
+
+**如果insert失败，则会返回一个迭代器和0，使用方法如下**
+
+```
+pair<set<ListNode *>::iterator, bool> itA;
+itA = nodeMap.insert(curA);
+curA = curA->next;
+if (!itA.second)
+  return *(itA.first);
+```
+### set转vector
+
+这里是匿名转，因为没有变量
+```
+vector<int> v(set.begin(), set.end());
+vector<int>(set.begin(), set.end());
+```
+
+注意，set不能通过下标来获取元素
 
 ### set大小
 
