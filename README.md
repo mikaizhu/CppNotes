@@ -71,6 +71,7 @@
       * [用户输入字符串](#用户输入字符串)
       * [字符串的查找和替换](#字符串的查找和替换)
       * [获取字符串长度](#获取字符串长度)
+      * [字符串的resize和reserve](#字符串的resize和reserve)
       * [字符串大小比较](#字符串大小比较)
       * [字符串的拼接](#字符串的拼接)
       * [字符串遍历](#字符串遍历)
@@ -197,7 +198,7 @@
    * [常用查找算法](#常用查找算法)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 9月24日 星期五 15时44分24秒 CST -->
+<!-- Added by: zwl, at: 2021年 9月30日 星期四 14时56分43秒 CST -->
 
 <!--te-->
 
@@ -1853,6 +1854,15 @@ s1.replace(pos, 1, "1111"); // 从0号位置开始计算字符，将1个字符�
 
 ```
 s1.size() >= s2.size();
+```
+
+### 字符串的resize和reserve
+
+```
+string s = "abc";
+s.resize(2); // ab
+s.resize(5)  // abc\0\0 如果字符串resize的长度大于字符串，则会在后边补充NULL或
+者\0
 ```
 
 ### 字符串大小比较
@@ -4177,7 +4187,7 @@ deque可以 头插，头删，尾插，尾删
 
 - push() 添加元素
 - top() 返会栈顶的元素
-- pop() 将数据弹出
+- pop() 将数据弹出, 该函数并不会返回被弹出的数
 - empty() 判断栈是否为空
 - size() 返回栈的大小
 
@@ -4457,6 +4467,13 @@ void print(map<int, int> &p)
     for(map<int, int>::iterator it=p.begin(); it != p.end(); it++)
         cout << it->first << " " << it->second << endl;
 }
+```
+
+另一种遍历方法：
+
+```
+for (auto it : map)
+  cout << it.first << " " << it.second << endl; // 注意这个是用.访问属性
 ```
 
 ### map大小和交换
