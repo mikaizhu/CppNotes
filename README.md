@@ -198,7 +198,7 @@
    * [常用查找算法](#常用查找算法)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: 2021年 9月30日 星期四 14时56分43秒 CST -->
+<!-- Added by: zwl, at: Thu Feb 24 17:13:54 CST 2022 -->
 
 <!--te-->
 
@@ -623,6 +623,10 @@ int main()
 
 cpp中含有很多数据类型，如：字符型，整型，浮点数等。这些数据的唯一本质区别就在于，
 所占的内存大小不一样.
+
+**int是两个字节，因为每个电脑中，字节长度可能会不一样，有些电脑一字节是8bits，有些电脑一字节是16bits** 
+
+**因为计算机中只能访问1字节地址，而不能访问每bit地址，所以即使是bool类型的数据，存储单元也要1字节** 
 
 - [变量类型大小](./code/day5/demo1.cpp) 
 
@@ -4524,7 +4528,7 @@ if (it != m.end())
 需要用到的容器unordered_map, 普通的map是有序的，按照key进行排序，这里不需要有
 序
 
-初始化的方式, 参考：https://en.cppreference.com/w/cpp/container/unordered_map
+全部使用方法参考: https://zh.cppreference.com/w/cpp/container/unordered_map
 
 ```
 #include <unordered_map>
@@ -4548,8 +4552,34 @@ int main()
 m[1] = 7;
 ```
 
-- 参考代码, [code](./code/day25/demo7.cpp) 
+**插入** :
+```
+    std::unordered_map<int, std::string> dict = {{1, "one"}, {2, "two"}};
+    dict.insert({3, "three"});
+```
 
+**查找元素** : 由此可见，find返回的是bool值
+
+```
+    std::unordered_map<int,char> example = {{1,'a'},{2,'b'}};
+ 
+    auto search = example.find(2);
+    if (search != example.end()) {
+        std::cout << "Found " << search->first << " " << search->second << '\n';
+    } else {
+        std::cout << "Not found\n";
+    }
+```
+
+**打印键值**:
+
+```
+    for( const auto& n : u ) {
+        std::cout << "Key:[" << n.first << "] Value:[" << n.second << "]\n";
+    }
+```
+
+- 参考代码, [code](./code/day25/demo7.cpp) 
 
 [【↥ back to top】](#目录)
 # day26
