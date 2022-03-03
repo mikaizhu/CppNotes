@@ -53,7 +53,7 @@
    * [构造函数的声明](#构造函数的声明)
    * [继承](#继承)
 * [day13](#day13)
-   * [数组](#数组)
+   * [数组array](#数组array)
       * [一维数组](#一维数组)
       * [多维度数组](#多维度数组)
       * [指向数组的指针](#指向数组的指针)
@@ -198,7 +198,7 @@
    * [常用查找算法](#常用查找算法)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: Thu Feb 24 17:15:03 CST 2022 -->
+<!-- Added by: zwl, at: Thu Mar  3 19:13:34 CST 2022 -->
 
 <!--te-->
 
@@ -1552,7 +1552,7 @@ class Player : public Entity
 [【↥ back to top】](#目录)
 # day13
 
-## 数组
+## 数组array
 
 ### 一维数组
 
@@ -1572,10 +1572,13 @@ int list[2] = {0} // 初始化为{0, 0}
 - 数组是一块连续的内存
 
 ```
-    int* pt = list;
-    cout << "the first element is " << *pt << endl;
-    cout << "the second element is " << *(pt + 1) << endl;
+int* pt = list;
+cout << "the first element is " << *pt << endl;
+cout << "the second element is " << *(pt + 1) << endl;
 ```
+
+**注意**: 数组的元素是不能删除的，只能进行覆盖,
+说明如果要删除数组的某个元素，就必须将后面地址的所有元素往前移动.
 
 ### 多维度数组
 
@@ -1583,19 +1586,19 @@ int list[2] = {0} // 初始化为{0, 0}
 - 多维数组的内存使用也是连续的
 
 ```
-    // 二维数组
+// 二维数组
 
-    int d_2list[2][2];
+int d_2list[2][2];
 
-    int d_2list[2][2] = {
-        {1, 2},
-        {3, 4},
-    };
+int d_2list[2][2] = {
+    {1, 2},
+    {3, 4},
+};
 
-    int d_2list[2][2] = {1, 2, 3, 4};
-    
-    // 高维度数组
-    int d_3list[2][2][2];
+int d_2list[2][2] = {1, 2, 3, 4};
+
+// 高维度数组
+int d_3list[2][2][2];
 ```
 
 ### 指向数组的指针
@@ -4558,7 +4561,7 @@ m[1] = 7;
     dict.insert({3, "three"});
 ```
 
-**查找元素** : 由此可见，find返回的是bool值
+**查找元素** : 由此可见，find返回的是迭代器类型, 如果没找到就会定位到end()
 
 ```
     std::unordered_map<int,char> example = {{1,'a'},{2,'b'}};
