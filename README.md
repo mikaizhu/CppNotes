@@ -31,6 +31,7 @@
    * [头文件中的#pragma once](#头文件中的pragma-once)
    * [预处理中"" 和 &lt;&gt; 的区别](#预处理中-和--的区别)
 * [day7 控制流语句 continue return break](#day7-控制流语句-continue-return-break)
+   * [三元表达式](#三元表达式)
 * [day8 指针 引用](#day8-指针-引用)
    * [指针](#指针)
    * [引用](#引用)
@@ -198,7 +199,7 @@
    * [常用查找算法](#常用查找算法)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: Thu Mar  3 19:13:34 CST 2022 -->
+<!-- Added by: zwl, at: Fri Mar  4 19:32:36 CST 2022 -->
 
 <!--te-->
 
@@ -921,6 +922,15 @@ return 是退出当前函数，后面代码都不会执行
 
 break是退出当前循环，执行循环外的代码
 
+## 三元表达式
+
+在python中相当于三目运算, 常用的两种方法:
+
+```
+ans = j - i + 1 < ans ? j - i + 1 : ans;
+
+return ans == INT_MAX ? 0 : ans;
+```
 
 
 [【↥ back to top】](#目录)
@@ -1097,6 +1107,21 @@ void move(Player player1) // 这里必须传入实例对象进去
 
 则相当于创建了一个新的类对象，相当于局部的，没有在之前的上面修改, 如果不是在类
 里面写方法, 要使用引用
+
+类中成员函数互相的调用：
+
+```
+class A {
+  public:
+  void move();
+  void step() {
+    move()
+  }
+
+};
+```
+
+<++>
 
 ## 类的声明(包括前置声明)
 
@@ -1975,6 +2000,8 @@ unsing std::vector;
 
 ### 定义和初始化
 
+
+
 ```
 vector<int> ivec;  // vector后面加尖括号，里面设置类型
 
@@ -1982,7 +2009,12 @@ vector<int> v1;
 vector<int> v2 = v1;
 vector<int> v3{a, b, c, d...}
 vector<int> v4 = {a, b, c, d...}
+vector<int> v5(v4.size(), 0) // {0, 0, 0...} 全部初始化为0，并且size为v4
+vector<int> v6(v4)
+vector<int> v7(v4.begin(), v4.end())
 ```
+
+更多初始化方法参考：https://zh.cppreference.com/w/cpp/container/vector/vector
 
 ### 向vector中添加元素
 
