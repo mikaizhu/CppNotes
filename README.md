@@ -199,7 +199,7 @@
    * [常用查找算法](#常用查找算法)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: Fri Mar  4 19:32:36 CST 2022 -->
+<!-- Added by: zwl, at: Sat Mar  5 20:29:41 CST 2022 -->
 
 <!--te-->
 
@@ -2000,8 +2000,6 @@ unsing std::vector;
 
 ### 定义和初始化
 
-
-
 ```
 vector<int> ivec;  // vector后面加尖括号，里面设置类型
 
@@ -2015,6 +2013,13 @@ vector<int> v7(v4.begin(), v4.end())
 ```
 
 更多初始化方法参考：https://zh.cppreference.com/w/cpp/container/vector/vector
+
+初始化二维vector
+
+```
+vector<vector<int>> ans(n, vector<int>(n, 0));
+```
+
 
 ### 向vector中添加元素
 
