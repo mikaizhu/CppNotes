@@ -196,11 +196,11 @@
    * [函数对象](#函数对象)
    * [谓词](#谓词)
    * [常用遍历算法for_each 和 transform](#常用遍历算法for_each-和-transform)
-   * [链表](#链表)
+* [链表](#链表)
    * [常用查找算法](#常用查找算法)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: Sun Mar  6 19:33:45 CST 2022 -->
+<!-- Added by: zwl, at: Sun Mar  6 19:35:30 CST 2022 -->
 
 <!--te-->
 
@@ -4899,7 +4899,9 @@ class MyCompare
 for_each(v.begin(), v.end(), myPrint);
 ```
 
-## 链表
+
+[【↥ back to top】](#目录)
+# 链表
 
 为什么cpp中的链表，要使用`new` 关键字进行创建呢？
 
