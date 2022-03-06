@@ -196,10 +196,11 @@
    * [函数对象](#函数对象)
    * [谓词](#谓词)
    * [常用遍历算法for_each 和 transform](#常用遍历算法for_each-和-transform)
+   * [链表](#链表)
    * [常用查找算法](#常用查找算法)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: Sun Mar  6 14:45:40 CST 2022 -->
+<!-- Added by: zwl, at: Sun Mar  6 19:33:45 CST 2022 -->
 
 <!--te-->
 
@@ -1495,7 +1496,7 @@ class Player
 };
 ```
 
-**或者使用** :
+**或者使用 初始化列表** :
 
 ```
 class Person
@@ -4897,6 +4898,76 @@ class MyCompare
 #include<algorithm>
 for_each(v.begin(), v.end(), myPrint);
 ```
+
+## 链表
+
+为什么cpp中的链表，要使用`new` 关键字进行创建呢？
+
+首先`new`
+是在堆上创建，如果不手动释放，是会一直在内存中的，造成内存泄漏。否则是在栈上创建的，系统会自动释放。
+
+如果不想链表的数据，自动被系统释放，最好自己在堆上创建一个链表。
+
+创建方法如下：
+```
+struct Node {
+  int val;
+  Node* next;
+  Node (int val): val(val), next(nullptr) {};
+};
+
+Node* head = new Node(3); // new返回的是指针类型，所以用Node类型的指针接收
+```
+
+如果我想直接创建一个链表，而不是一个Node呢？
+
+创建方式如下：
+```
+class MyLinkedList {
+public:
+    struct Node {
+        int val;
+        Node* next;
+        Node(int val): val(val), next(nullptr) {};
+        Node(int val, Node* next): val(val), next(next) {};
+    };
+
+    MyLinkedList() {
+        _fake = new Node(0);
+        _size = 0;
+    }
+    
+    int get(int index) {
+    }
+    
+    void addAtHead(int val) {
+    }
+    
+    void addAtTail(int val) {
+    }
+    
+    void addAtIndex(int index, int val) {
+    }
+    
+    void deleteAtIndex(int index) {
+    }
+private:
+    Node* _fake;
+    int _size;
+};
+
+/**
+ * Your MyLinkedList object will be instantiated and called as such:
+ * MyLinkedList* obj = new MyLinkedList();
+ */
+```
+
+删除节点：
+
+```
+delete cur;
+```
+
 
 ## 常用查找算法
 
