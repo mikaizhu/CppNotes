@@ -50,6 +50,7 @@
    * [变量说明](#变量说明)
 * [day12](#day12)
    * [构造函数 constructor](#构造函数-constructor)
+   * [构造函数与析构函数的补充(构造函数的几种写法)](#构造函数与析构函数的补充构造函数的几种写法)
    * [destructor 析构函数](#destructor-析构函数)
    * [构造函数的声明](#构造函数的声明)
    * [继承](#继承)
@@ -138,7 +139,6 @@
    * [类和对象](#类和对象)
       * [访问权限](#访问权限)
       * [练习](#练习)
-   * [构造函数与析构函数的补充(构造函数的几种写法)](#构造函数与析构函数的补充构造函数的几种写法)
 * [day21](#day21)
    * [复制构造函数的调用时机](#复制构造函数的调用时机)
    * [构造函数的调用规则](#构造函数的调用规则)
@@ -199,7 +199,7 @@
    * [常用查找算法](#常用查找算法)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: Sat Mar  5 20:29:41 CST 2022 -->
+<!-- Added by: zwl, at: Sun Mar  6 14:45:40 CST 2022 -->
 
 <!--te-->
 
@@ -1121,8 +1121,6 @@ class A {
 };
 ```
 
-<++>
-
 ## 类的声明(包括前置声明)
 
 通常我们是在头文件中进行声明操作，类的声明方式如下, 假如现在有个类：
@@ -1383,7 +1381,6 @@ int main()
 ```
 
 
-
 [【↥ back to top】](#目录)
 # day 11 
 
@@ -1497,6 +1494,89 @@ class Player
     }
 };
 ```
+
+**或者使用** :
+
+```
+class Person
+{
+public:
+  int A;
+  string B;
+  double C;
+
+  Person(int a, string b, double c):A(a), B(b) C(c)
+  {
+    这里面写其他代码，使代码更简洁
+  } // 这里可以加分号，不加也行
+};
+```
+
+
+## 构造函数与析构函数的补充(构造函数的几种写法)
+
+构造函数的几种类型:
+
+```
+1. 普通的构造函数
+
+2. 带参数的构造函数
+
+3. 拷贝构造函数
+
+class People
+{
+  private:
+    int a;
+
+  public:
+    People()
+    {
+        cout << "调用无参数构造函数" << endl;
+    }
+
+    People(int b)
+    {
+       a = b; 
+       cout << "调用有参数的构造函数" << endl;
+    }
+
+    People(const People &b)
+    {
+        a = b.a; // b 是另一个类的引用
+        cout << "调用复制构造函数" << endl;
+    }
+};
+
+int main()
+{
+    People p1;
+    People p2(2);
+    People p3(p2);
+}
+```
+
+当然，调用构造函数也有以下几种：
+
+```
+1. 括号法调用
+    People p2(2);
+    People p3(p2);
+
+说明下为什么不能：People p1(); 加括号 这样cpp编译器会认为这是一个声明, 而不会
+创建一个类。
+
+2. 显式法
+Pepole p1;
+People p2 = People(2);
+People p3 = People(p2);
+
+
+3. 隐式法
+People p2 = 2; // 相当于显式法
+People p3 = p2; // 也会自动转换为显式法
+```
+
 
 ## destructor 析构函数
 
@@ -3407,70 +3487,6 @@ float Point::getY()
 ```
 
 **如果有多个类, 则只要将这个类的声明包含进来即可使用，然后cpp会自动寻找link.** 
-
-## 构造函数与析构函数的补充(构造函数的几种写法)
-
-构造函数的几种类型:
-
-```
-1. 普通的构造函数
-
-2. 带参数的构造函数
-
-3. 拷贝构造函数
-
-class People
-{
-  private:
-    int a;
-
-  public:
-    People()
-    {
-        cout << "调用无参数构造函数" << endl;
-    }
-
-    People(int b)
-    {
-       a = b; 
-       cout << "调用有参数的构造函数" << endl;
-    }
-
-    People(const People &b)
-    {
-        a = b.a; // b 是另一个类的引用
-        cout << "调用复制构造函数" << endl;
-    }
-};
-
-int main()
-{
-    People p1;
-    People p2(2);
-    People p3(p2);
-}
-```
-
-当然，调用构造函数也有以下几种：
-
-```
-1. 括号法调用
-    People p2(2);
-    People p3(p2);
-
-说明下为什么不能：People p1(); 加括号 这样cpp编译器会认为这是一个声明, 而不会
-创建一个类。
-
-2. 显式法
-Pepole p1;
-People p2 = People(2);
-People p3 = People(p2);
-
-
-3. 隐式法
-People p2 = 2; // 相当于显式法
-People p3 = p2; // 也会自动转换为显式法
-```
 
 
 [【↥ back to top】](#目录)
