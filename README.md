@@ -200,7 +200,7 @@
    * [常用查找算法](#常用查找算法)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: Sun Mar  6 19:35:30 CST 2022 -->
+<!-- Added by: zwl, at: Mon Mar  7 21:01:14 CST 2022 -->
 
 <!--te-->
 
@@ -4964,10 +4964,16 @@ private:
  */
 ```
 
-删除节点：
+删除节点：链表一定要注意自己释放，否则会造成内存泄漏
 
 ```
 delete cur;
+```
+
+赋值空链表：
+
+```
+Node* cur = nullptr;
 ```
 
 
