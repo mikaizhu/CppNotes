@@ -197,10 +197,10 @@
    * [谓词](#谓词)
    * [常用遍历算法for_each 和 transform](#常用遍历算法for_each-和-transform)
 * [链表](#链表)
-   * [常用查找算法](#常用查找算法)
+   * [常用算法](#常用算法)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: Mon Mar  7 21:01:14 CST 2022 -->
+<!-- Added by: zwl, at: Tue Mar  8 19:19:30 CST 2022 -->
 
 <!--te-->
 
@@ -1686,6 +1686,16 @@ cout << "the second element is " << *(pt + 1) << endl;
 **注意**: 数组的元素是不能删除的，只能进行覆盖,
 说明如果要删除数组的某个元素，就必须将后面地址的所有元素往前移动.
 
+重新初始化array，使用memset
+
+```
+int a[3] = {0};
+
+// 第一个参数为指针，第二个参数为填充的数，int类型，第三个为填充字节大小
+memset(a, 1, 3*sizeof(int)) // memset means memory set
+```
+
+
 ### 多维度数组
 
 - 多维数组有下面几种定义方式
@@ -1782,18 +1792,18 @@ int* GetList()
 字符串的定义：(有下面三种)
 
 ```
-    const char* name = "rike and morty";
+const char* name = "rike and morty";
 
-    char name2[] = {'r', 'i', 'k', 'e', '\0'};
+char name2[] = {'r', 'i', 'k', 'e', '\0'};
 
-    char name3[] = {'r', 'i', 'k', 'e', 0};
+char name3[] = {'r', 'i', 'k', 'e', 0};
 ```
 
 字符串的访问和修改：
 
 ```
-    char* name = "rike and morty";
-    name[5] = "A"
+char* name = "rike and morty";
+name[5] = "A"
 ```
 
 使用内置的string模块
@@ -1802,12 +1812,41 @@ int* GetList()
 #include <string>
 using namespace std;
 
-    string name4 = "rike and morty";
-    cout << "name4 is: " << name4 << endl;
+string name4 = "rike and morty";
+cout << "name4 is: " << name4 << endl;
 
-    string name5 = string("rike") + "and morty"; // 两个字符串相加
-    cout << "name5 is: " << name5 << endl;
+string name5 = string("rike") + "and morty"; // 两个字符串相加
+cout << "name5 is: " << name5 << endl;
 ```
+
+字符串遍历：
+
+```
+for (int i = 0; i < s.size(); i++) {
+  cout << s[i] << endl;
+}
+```
+
+将`char` 类型的数据转换成string:
+
+```
+string(1, 'a') 
+```
+
+**注意** :
+```
+vector<string> ans;
+ans.push_back('a'); // 这样会报错，因为'a'不是字符串
+ans.push_back(string(1, 'a')) // 正确
+```
+
+`char` 类型数据和int数据相加
+```
+'a' + 1 // 会自动转换成int数值
+
+char('a' + 1) // 则会转换成char数据
+```
+
 
 [【↥ back to top】](#目录)
 # day14 知识巩固
@@ -1891,22 +1930,22 @@ s6.assign(10, 'a');
 - append 操作
 
 ```
-    string s1 = "I";
+string s1 = "I";
 
-    s1 += " love ";
+s1 += " love ";
 
-    cout << s1 << endl;
-    
-    string s2 = " you";
-    s1 += s2;
-    cout << s1 << endl;   
+cout << s1 << endl;
 
-    s1.append(".");
-    cout << s1 << endl;   
-    
-    string s3 = "hello world";
-    s1.append(s3, 0, 5); // 将s3从位置0开始，往后5个字符拼接到后面
-    cout << s1 << endl;
+string s2 = " you";
+s1 += s2;
+cout << s1 << endl;   
+
+s1.append(".");
+cout << s1 << endl;   
+
+string s3 = "hello world";
+s1.append(s3, 0, 5); // 将s3从位置0开始，往后5个字符拼接到后面
+cout << s1 << endl;
 ```
 
 - 参考代码：[code](./code/day24/demo6.cpp) 
@@ -4977,13 +5016,20 @@ Node* cur = nullptr;
 ```
 
 
-## 常用查找算法
+## 常用算法
 
 - find
 - find_if
 - binary_search
 - count
 - count_if
+
+`min` 算法：
+
+```
+min(3, 4)
+```
+
 
 
 
