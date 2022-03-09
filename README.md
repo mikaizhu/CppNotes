@@ -200,7 +200,7 @@
    * [常用算法](#常用算法)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: Tue Mar  8 19:19:30 CST 2022 -->
+<!-- Added by: zwl, at: Wed Mar  9 20:24:54 CST 2022 -->
 
 <!--te-->
 
@@ -4476,6 +4476,11 @@ curA = curA->next;
 if (!itA.second)
   return *(itA.first);
 ```
+
+`unordered_set` 是没有顺序的, 并且底层的实现是哈希表，效率更高
+
+
+
 ### set转vector
 
 这里是匿名转，因为没有变量
