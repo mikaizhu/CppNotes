@@ -198,9 +198,11 @@
    * [常用遍历算法for_each 和 transform](#常用遍历算法for_each-和-transform)
 * [链表](#链表)
    * [常用算法](#常用算法)
+* [gdb调试](#gdb调试)
+* [溢出问题](#溢出问题)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: Wed Mar  9 20:24:54 CST 2022 -->
+<!-- Added by: zwl, at: Sat Mar 12 16:32:36 CST 2022 -->
 
 <!--te-->
 
@@ -1695,7 +1697,6 @@ int a[3] = {0};
 memset(a, 1, 3*sizeof(int)) // memset means memory set
 ```
 
-
 ### 多维度数组
 
 - 多维数组有下面几种定义方式
@@ -2448,6 +2449,29 @@ v.swap(v1); // v变成v1， v1变成v
 print<int>(v);
 print<int>(v1);
 ```
+
+swap 常见用法：
+
+```
+如字符串反转
+输入：s = ["h","e","l","l","o"]
+输出：["o","l","l","e","h"]
+
+int left = 0, right = s.size()-1;
+while (left <= right) {
+    swap(s[left], s[right]);
+    left++;
+    right--;
+
+swap 相当于：
+  char temp;
+  temp = s[left];
+  s[left] = s[right];
+  s[right] = temp;
+```
+
+
+
 
 - 使用swap进行内存收缩
 
@@ -5035,6 +5059,100 @@ Node* cur = nullptr;
 min(3, 4)
 ```
 
+`reverse` :
+
+```
+#include <vector>
+#include <iostream>
+#include <iterator>
+#include <algorithm>
+ 
+int main()
+{
+    std::vector<int> v{1,2,3};
+    std::reverse(std::begin(v), std::end(v)); // 或者使用v.begin(), v.end()
+    for(auto e : v) std::cout << e;
+    std::cout << '\n';
+ 
+    int a[] = {4, 5, 6, 7};
+    std::reverse(std::begin(a), std::end(a));
+    for(auto e : a) std::cout << e;
+}
+```
+
+
+[【↥ back to top】](#目录)
+# gdb调试
+
+- [参考网址](http://c.biancheng.net/view/8123.html) 
+
+**安装gdb** :
+
+- `brew install gdb` 
+- `apt install gdb` 
+
+参考：
+
+- https://gist.github.com/mike-myers-tob/9a6013124bad7ff074d3297db2c98247
+- https://zhuanlan.zhihu.com/p/68398728 最后会卡住，参考这个
+
+**准备调试** :
+
+```
+// 使用-g参数
+g++/gcc -g test.cpp -o a.out
+```
+
+**开始调试** :
+
+```
+gdb a.out
+```
+
+**基本用法** :
+
+```
+b/break 10 // set break point at line 10
+
+r/run // run to break point
+
+n/next // run the code one by one but not go into the function
+
+c/continue // run to the next break point if there is not point, file will run over
+
+q/quit // close gdb
+
+p/print argument // print argument's value
+p ii+10
+p sort(val.begin(), val.end())
+
+set val ii=20 // set value 
+set "aa bb.c" // if it includs special words
+```
+
+```
+where // 查看当前位置
+info functions // 列出所有的函数
+info functions main* // 可以使用正则表达式
+
+info break // 查看所有断点
+
+call func() // 调用内部某函数
+
+delete/clear 2/func // 删除断点
+```
+
+
+[【↥ back to top】](#目录)
+# 溢出问题
+
+```
+nums[i] + nums[j] + nums[k] + nums[l] //
+如果vector里面数据是int类型，则加起来也是int，会导致溢出
+
+解决办法 强制转换成long
+(long) nums[i] + nums[j] + nums[k] + nums[l]
+```
 
 
 
