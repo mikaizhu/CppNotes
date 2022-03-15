@@ -202,7 +202,7 @@
 * [溢出问题](#溢出问题)
 * [TODO](#todo)
 
-<!-- Added by: zwl, at: Sat Mar 12 16:32:36 CST 2022 -->
+<!-- Added by: zwl, at: Tue Mar 15 15:39:25 CST 2022 -->
 
 <!--te-->
 
@@ -1871,6 +1871,10 @@ string s0 = "Hello world"; // 直接初始化string字符串
 string s1(str); // 通过c语言的字符串，来初始化string
 string s2(s0); // 拷贝构造，通过另一个string来初始化一个string
 string s3(10, 'a'); // int num, char c 来复制多个字符，拼接成一个字符串
+
+string s4(s0.begin(), s0.end());
+string s5(s0.begin(), s0.begin() + 2);
+string(s0.begin(), s0.begin() + 2);
 ```
 ### 将char类型转换成字符串
 
@@ -2099,6 +2103,10 @@ string s1 = "hello "
 s1.insert(1, "11") // h11ello 
 
 s1.erase(1, 2) // 从位置1开始，删掉后面两个字符
+s1.erase(1, 0) // 如果第二个位置是0，则不会删除
+s1.erase(1, 1) // 删除当前位置的字符
+s1.erase(0) //
+如果只传入第一个参数，则会删除当前位置和后面的所有字符，该命令为清空字符串
 ```
 
 ### 字符串子串获取
@@ -2108,6 +2116,7 @@ s1.erase(1, 2) // 从位置1开始，删掉后面两个字符
 ```
 string s1 = "hello";
 string sub = s1.substr(0, 1) // h 从0开始，往后数1个字符
+string sub = s1.substr(0, 0) // 空字符 什么都没有
 ```
 
 ## vector
